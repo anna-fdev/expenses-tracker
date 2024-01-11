@@ -1,12 +1,10 @@
-import { execSync } from 'child_process';
-import { join } from 'path';
+import axios from 'axios';
 
-describe('CLI tests', () => {
-  it('should print a message', () => {
-    const cliPath = join(process.cwd(), 'dist/apps/server');
+describe('GET /api', () => {
+  it('should return a message', async () => {
+    const res = await axios.get(`/api`);
 
-    const output = execSync(`node ${cliPath}`).toString();
-
-    expect(output).toMatch(/Hello World/);
+    expect(res.status).toBe(200);
+    expect(res.data).toEqual({ message: 'Hello API' });
   });
 });
