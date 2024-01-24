@@ -5,7 +5,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Request } from 'express';
 import process from 'process';
 import { getHeaderAuthToken } from '../utils';
 
@@ -32,11 +31,5 @@ export class AuthGuard implements CanActivate {
     }
 
     return true;
-  }
-
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-
-    return type === 'Bearer' ? token : undefined;
   }
 }

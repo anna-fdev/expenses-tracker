@@ -47,7 +47,7 @@ export class UserService {
     });
 
     const payload = {
-      sub: createdUser.id,
+      id: createdUser.id,
       email: createdUser.email,
       role: createdUser.role,
     };
@@ -61,12 +61,11 @@ export class UserService {
   }
 
   async signIn(params: AuthDto): Promise<{
-    user: UserDto;
     token: string;
   }> {
     const { email, password } = params;
 
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUniqueOrThrow({
       where: { email },
     });
 
@@ -87,7 +86,6 @@ export class UserService {
     const token = await this.jwtService.signAsync(payload);
 
     return {
-      user: plainToInstance(UserDto, user, { strategy: 'excludeAll' }),
       token,
     };
   }
