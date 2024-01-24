@@ -4,6 +4,7 @@ import Home from '../pages/Home';
 import SignUp from '../pages/SignUp';
 import SignIn from '../pages/SignIn';
 import Footer from '../components/Footer';
+import Categories from '../pages/Categories';
 
 export function App() {
   return (
@@ -15,11 +16,11 @@ export function App() {
         <Route path="/" element={<Home />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/sign-in" element={<SignIn />} />
+        <Route path="/categories" element={<Categories />} />
       </Routes>
       <div role="footer">
         <Footer />
       </div>
-      {/* END: routes */}
     </div>
   );
 }
