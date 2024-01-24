@@ -10,13 +10,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
-  id       Int    @id @default(autoincrement())
-  name     String @db.VarChar(100)
-  password String @db.VarChar(100)
-  username String @unique @db.VarChar(45)
-  email    String @unique @db.VarChar(45)
-  role     Role   @default(CLIENT)
+model User {
+  id       Int     @id @default(autoincrement())
+  name     String? @db.VarChar(100)
+  password String  @db.VarChar(100)
+  email    String  @unique @db.VarChar(45)
+  role     Role    @default(CLIENT)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
