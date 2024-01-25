@@ -16,6 +16,7 @@ model User {
   password String  @db.VarChar(100)
   email    String  @unique @db.VarChar(45)
   role     Role    @default(CLIENT)
+  settings Json    @default("{}")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -24,4 +25,15 @@ model User {
 enum Role {
   ADMIN
   CLIENT
+}
+
+model Expense {
+  id       Int     @id @default(autoincrement())
+  name     String? @db.VarChar(100)
+  amount   Float   @db.DoublePrecision
+  note     String? @db.VarChar(100)
+  category String  @db.VarChar(100)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
