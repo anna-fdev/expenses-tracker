@@ -23,7 +23,7 @@ const DUMMY_CATEGORIES: any[] = [
 const Categories = () => {
   return (
     <Container maxWidth="lg">
-      <Grid container spacing={4} mt={3}>
+      <Grid container spacing={4}>
         {DUMMY_CATEGORIES.map((category, index) => (
           <Grid item xs={6} md={4} key={index}>
             <ListItemButton

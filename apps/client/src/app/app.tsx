@@ -4,7 +4,8 @@ import Home from '../pages/Home';
 import SignUp from '../pages/SignUp';
 import SignIn from '../pages/SignIn';
 import Footer from '../components/Footer';
-import Categories from '../pages/Categories';
+import AddExpense from '../pages/AddExpense';
+import ExpenseDetails from '../pages/ExpenseDetails';
 
 export function App() {
   return (
@@ -16,7 +17,8 @@ export function App() {
         <Route path="/" element={<Home />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/sign-in" element={<SignIn />} />
-        <Route path="/categories" element={<Categories />} />
+        <Route path="/add-expense" element={<AddExpense />} />
+        <Route path="/expense-details" element={<ExpenseDetails />} />
       </Routes>
       <div role="footer">
         <Footer />

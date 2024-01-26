@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import { theme } from '../assets/createTheme';
 
-const pages = ['Categories', 'Currencies', 'Settings'];
+const pages = ['Add-Expense', 'Expense-Details', 'Settings'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -31,7 +31,7 @@ function ResponsiveAppBar() {
   return (
     <ThemeProvider theme={theme}>
       <AppBar position="static">
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           <Toolbar disableGutters>
             <AccountBalanceWalletIcon
               sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}
@@ -149,3 +149,5 @@ function ResponsiveAppBar() {
 }
 
 export default ResponsiveAppBar;
+
+//TODO provide correct page names
