@@ -2,8 +2,9 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import process from 'process';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-const { PORT } = process.env;
+const { SERVER_PORT = 3000 } = process.env;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,12 +15,20 @@ async function bootstrap() {
 
   app.setGlobalPrefix(globalPrefix);
 
-  const port = PORT || 3000;
+  const config = new DocumentBuilder()
+    .setTitle('Expenses API')
+    .setDescription('Expenses API documentation')
+    .setVersion('1.0')
+    .addTag('expenses')
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document);
 
-  await app.listen(port);
+  await app.listen(SERVER_PORT);
 
   Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
+    `🚀 Application is running on: http://localhost:${SERVER_PORT}/${globalPrefix}`
   );
 }
 

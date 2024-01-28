@@ -14,6 +14,7 @@ import { Request } from 'express';
 import { AuthDto } from '../auth/dto/auth-dto';
 import { UserDto } from './dto/user-dto';
 import { plainToInstance } from 'class-transformer';
+import { TokenDto } from './dto/token-dto';
 
 @Injectable()
 export class UserService {
@@ -60,9 +61,7 @@ export class UserService {
     };
   }
 
-  async signIn(params: AuthDto): Promise<{
-    token: string;
-  }> {
+  async signIn(params: AuthDto): Promise<TokenDto> {
     const { email, password } = params;
 
     const user = await this.prisma.user.findUniqueOrThrow({

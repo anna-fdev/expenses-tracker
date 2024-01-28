@@ -3,12 +3,14 @@ import { Request } from 'express';
 import { UserService } from './user.service';
 import { AuthGuard } from '../guards/auth.guard';
 import { UserDto } from './dto/user-dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
 
   @Get('me')
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   async userProfile(@Req() req: Request): Promise<UserDto> {
     return await this.userService.getUserMe(req);

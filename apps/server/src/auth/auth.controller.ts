@@ -1,6 +1,8 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth-dto';
+import { TokenDto } from '../user/dto/token-dto';
+import { ApiOkResponse } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -12,7 +14,11 @@ export class AuthController {
   }
 
   @Post('sign-in')
-  async signIn(@Body() params: AuthDto) {
+  @ApiOkResponse({
+    description: 'Sign In response model',
+    type: TokenDto,
+  })
+  async signIn(@Body() params: AuthDto): Promise<TokenDto> {
     return await this.authService.signIn(params);
   }
 }
