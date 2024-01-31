@@ -11,7 +11,7 @@ import * as bcrypt from 'bcrypt';
 import { getHeaderAuthToken } from '../utils';
 
 import { Request } from 'express';
-import { AuthDto } from '../auth/dto/auth-dto';
+import { AuthParamsDto, SignUpResponseDto } from '../auth/dto/auth-dto';
 import { UserDto } from './dto/user-dto';
 import { plainToInstance } from 'class-transformer';
 import { TokenDto } from './dto/token-dto';
@@ -23,10 +23,7 @@ export class UserService {
     private readonly prisma: PrismaService
   ) {}
 
-  async signUp(params: AuthDto): Promise<{
-    user: UserDto;
-    token: string;
-  }> {
+  async signUp(params: AuthParamsDto): Promise<SignUpResponseDto> {
     const { email, password } = params;
 
     const userAlreadyExists = await this.prisma.user.findFirst({
@@ -61,7 +58,7 @@ export class UserService {
     };
   }
 
-  async signIn(params: AuthDto): Promise<TokenDto> {
+  async signIn(params: AuthParamsDto): Promise<TokenDto> {
     const { email, password } = params;
 
     const user = await this.prisma.user.findUniqueOrThrow({
