@@ -3,8 +3,9 @@ import { Request } from 'express';
 import { UserService } from './user.service';
 import { AuthGuard } from '../guards/auth.guard';
 import { UserDto } from './dto/user-dto';
-import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('user')
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}

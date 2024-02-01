@@ -19,7 +19,6 @@ async function bootstrap() {
     .setTitle('Expenses API')
     .setDescription('Expenses API documentation')
     .setVersion('1.0')
-    .addTag('expenses')
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);

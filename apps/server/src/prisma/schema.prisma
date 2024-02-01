@@ -30,8 +30,7 @@ enum Role {
 model Expense {
   id       Int     @id @default(autoincrement())
   name     String? @db.VarChar(100)
-  amount   Float   @db.DoublePrecision
-  note     String? @db.VarChar(100)
+  amount   Decimal @db.Decimal(10, 2)
   category String  @db.VarChar(100)
 
   createdAt DateTime @default(now())
