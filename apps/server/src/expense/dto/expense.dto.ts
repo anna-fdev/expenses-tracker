@@ -1,8 +1,9 @@
-import { Expose } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import { IsNumber, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { DecimalNumber } from '../../utils';
 
-export class CreateExpenseParams {
+export class CUExpenseParams {
   @ApiProperty()
   @Expose()
   amount: number;
@@ -23,10 +24,11 @@ export class ExpenseDto {
   @Expose()
   id: number;
 
-  @IsNumber()
+  @Type(() => DecimalNumber)
   @ApiProperty()
   @Expose()
-  amount: number;
+  @Transform(({ obj, key }) => Number(obj[key]))
+  amount: DecimalNumber;
 
   @IsString()
   @ApiProperty()

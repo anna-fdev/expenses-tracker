@@ -1,69 +1,90 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.servise';
-import { CreateExpenseParams, ExpenseDto } from './dto/expense.dto';
-import { plainToInstance } from 'class-transformer';
+import { CUExpenseParams, ExpenseDto } from './dto/expense.dto';
+import { Request } from 'express';
+import { getHeaderAuthToken, transform } from '../utils';
+import { JwtService } from '@nestjs/jwt';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ExpenseService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly prisma: PrismaService
+  ) {}
 
-  async getExpense(): Promise<ExpenseDto[]> {
-    const expense = await this.prisma.expense.findMany();
+  async getExpense(request: Request): Promise<ExpenseDto[]> {
+    const token = getHeaderAuthToken(request);
 
-    return expense.map((item) =>
-      plainToInstance(ExpenseDto, item, { strategy: 'excludeAll' })
-    );
+    const { id: userId } = this.jwtService.decode(token);
+
+    const expense = await this.prisma.expense.findMany({
+      where: { userId },
+    });
+
+    return expense.map((item) => transform(ExpenseDto, item));
   }
 
-  async createExpense(data: CreateExpenseParams) {
+  async createExpense(data: CUExpenseParams, request: Request) {
+    const token = getHeaderAuthToken(request);
+
+    const { id } = this.jwtService.decode(token);
+
     const createdExpense = await this.prisma.expense.create({
       data: {
         ...data,
-        amount: Number(data.amount),
+        userId: Number(id),
       },
     });
 
-    const expense = {
-      ...createdExpense,
-      amount: Number(createdExpense.amount),
-    };
-
-    return plainToInstance(ExpenseDto, expense, {
-      strategy: 'excludeAll',
-    });
+    return transform(ExpenseDto, createdExpense);
   }
 
-  async updateExpense(id: number, data: CreateExpenseParams) {
-    const updatedExpense = await this.prisma.expense.update({
-      where: { id: Number(id) },
-      data: {
-        ...data,
-        amount: Number(data.amount),
-      },
-    });
+  async updateExpense(id: string, data: CUExpenseParams, request: Request) {
+    const token = getHeaderAuthToken(request);
 
-    const expense = {
-      ...updatedExpense,
-      amount: Number(updatedExpense.amount),
-    };
+    const { id: userId } = this.jwtService.decode(token);
 
-    return plainToInstance(ExpenseDto, expense, {
-      strategy: 'excludeAll',
-    });
+    const updatedExpense = await this.prisma.expense
+      .update({
+        where: { id, userId },
+        data: {
+          ...data,
+          userId,
+        },
+      })
+      .catch((error) => {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+          if (error.code === 'P2025' || error.code === 'P2016') {
+            throw new NotFoundException(`Can't find a record with id ${id}`);
+          }
+        }
+
+        throw error;
+      });
+
+    return transform(ExpenseDto, updatedExpense);
   }
 
-  async deleteExpense(id: number) {
-    const deletedExpense = await this.prisma.expense.delete({
-      where: { id: Number(id) },
-    });
+  async deleteExpense(id: string, request: Request) {
+    const token = getHeaderAuthToken(request);
 
-    const expense = {
-      ...deletedExpense,
-      amount: Number(deletedExpense.amount),
-    };
+    const { id: userId } = this.jwtService.decode(token);
 
-    return plainToInstance(ExpenseDto, expense, {
-      strategy: 'excludeAll',
-    });
+    const deletedExpense = await this.prisma.expense
+      .delete({
+        where: { id, userId },
+      })
+      .catch((error) => {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+          if (error.code === 'P2025' || error.code === 'P2016') {
+            throw new NotFoundException(`Can't find a record with id ${id}`);
+          }
+        }
+
+        throw error;
+      });
+
+    return transform(ExpenseDto, deletedExpense);
   }
 }
