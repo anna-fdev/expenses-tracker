@@ -16,10 +16,10 @@ export class ExpenseService {
   async getExpense(request: Request): Promise<ExpenseDto[]> {
     const token = getHeaderAuthToken(request);
 
-    const { id: userId } = this.jwtService.decode(token);
+    const { id: user_id } = this.jwtService.decode(token);
 
     const expense = await this.prisma.expense.findMany({
-      where: { userId },
+      where: { user_id },
     });
 
     return expense.map((item) => transform(ExpenseDto, item));
@@ -33,7 +33,7 @@ export class ExpenseService {
     const createdExpense = await this.prisma.expense.create({
       data: {
         ...data,
-        userId: Number(id),
+        user_id: Number(id),
       },
     });
 
@@ -43,14 +43,14 @@ export class ExpenseService {
   async updateExpense(id: string, data: CUExpenseParams, request: Request) {
     const token = getHeaderAuthToken(request);
 
-    const { id: userId } = this.jwtService.decode(token);
+    const { id: user_id } = this.jwtService.decode(token);
 
     const updatedExpense = await this.prisma.expense
       .update({
-        where: { id, userId },
+        where: { id, user_id },
         data: {
           ...data,
-          userId,
+          user_id,
         },
       })
       .catch((error) => {
@@ -69,11 +69,11 @@ export class ExpenseService {
   async deleteExpense(id: string, request: Request) {
     const token = getHeaderAuthToken(request);
 
-    const { id: userId } = this.jwtService.decode(token);
+    const { id: user_id } = this.jwtService.decode(token);
 
     const deletedExpense = await this.prisma.expense
       .delete({
-        where: { id, userId },
+        where: { id, user_id },
       })
       .catch((error) => {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
