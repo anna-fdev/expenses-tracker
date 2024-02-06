@@ -15,6 +15,9 @@ import { AuthParamsDto, SignUpResponseDto } from '../auth/dto/auth-dto';
 import { UserDto } from './dto/user-dto';
 import { plainToInstance } from 'class-transformer';
 import { TokenDto } from './dto/token-dto';
+import process from 'process';
+
+const { BCRYPT_SALT_VALUE } = process.env;
 
 @Injectable()
 export class UserService {
@@ -34,7 +37,7 @@ export class UserService {
       throw new HttpException('user_already_exists', HttpStatus.CONFLICT);
     }
 
-    const salt = await bcrypt.genSalt(8);
+    const salt = await bcrypt.genSalt(BCRYPT_SALT_VALUE);
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const createdUser = await this.prisma.user.create({

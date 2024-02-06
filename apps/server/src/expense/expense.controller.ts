@@ -14,6 +14,7 @@ import { ExpenseService } from './expense.service';
 import { CUExpenseParams, ExpenseDto } from './dto/expense.dto';
 import { Request } from 'express';
 import { AuthGuard } from '../guards/auth.guard';
+import { ExpenseQueryParamsDto } from './dto/expense-query-params.dto';
 
 @ApiTags('expense')
 @Controller('expense')
@@ -27,8 +28,11 @@ export class ExpenseController {
     description: 'Get Expense response model',
     type: [ExpenseDto],
   })
-  async getExpense(@Req() request: Request) {
-    return await this.expenseService.getExpense(request);
+  async getExpense(
+    @Body() params: ExpenseQueryParamsDto,
+    @Req() request: Request
+  ) {
+    return await this.expenseService.getExpense(params, request);
   }
 
   @Post()
@@ -38,8 +42,11 @@ export class ExpenseController {
     description: 'Create Expense response model',
     type: ExpenseDto,
   })
-  async createExpense(@Body() data: CUExpenseParams, @Req() request: Request) {
-    return await this.expenseService.createExpense(data, request);
+  async createExpense(
+    @Body() params: CUExpenseParams,
+    @Req() request: Request
+  ) {
+    return await this.expenseService.createExpense(params, request);
   }
 
   @Put(':id')

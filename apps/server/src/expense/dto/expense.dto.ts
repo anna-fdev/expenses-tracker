@@ -1,6 +1,6 @@
 import { Expose, Transform, Type } from 'class-transformer';
-import { IsDateString, IsNumber, IsString } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { DecimalNumber } from '../../utils';
 
 export class CUExpenseParams {
@@ -9,7 +9,8 @@ export class CUExpenseParams {
   amount: number;
 
   @IsString()
-  @ApiProperty()
+  @IsOptional()
+  @ApiPropertyOptional()
   @Expose()
   name?: string;
 
@@ -22,7 +23,6 @@ export class CUExpenseParams {
   @ApiProperty()
   @Expose()
   expense_date: Date;
-
 }
 
 export class ExpenseDto {
@@ -37,7 +37,8 @@ export class ExpenseDto {
   amount: DecimalNumber;
 
   @IsString()
-  @ApiProperty()
+  @IsOptional()
+  @ApiPropertyOptional()
   @Expose()
   name?: string;
 

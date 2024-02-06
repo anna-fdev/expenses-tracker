@@ -5,6 +5,7 @@ import { Request } from 'express';
 import { getHeaderAuthToken, transform } from '../utils';
 import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '@prisma/client';
+import { ExpenseQueryParamsDto } from './dto/expense-query-params.dto';
 
 @Injectable()
 export class ExpenseService {
@@ -13,13 +14,22 @@ export class ExpenseService {
     private readonly prisma: PrismaService
   ) {}
 
-  async getExpense(request: Request): Promise<ExpenseDto[]> {
+  async getExpense(
+    params: ExpenseQueryParamsDto,
+    request: Request
+  ): Promise<ExpenseDto[]> {
     const token = getHeaderAuthToken(request);
 
     const { id: user_id } = this.jwtService.decode(token);
 
     const expense = await this.prisma.expense.findMany({
-      where: { user_id },
+      where: {
+        user_id,
+        expense_date: {
+          lte: new Date(params.end_date),
+          gte: new Date(params.start_date),
+        },
+      },
     });
 
     return expense.map((item) => transform(ExpenseDto, item));
