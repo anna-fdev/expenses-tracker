@@ -28,11 +28,11 @@ export class ExpenseController {
     description: 'Get Expense response model',
     type: [ExpenseDto],
   })
-  async getExpense(
+  async getExpenses(
     @Body() params: ExpenseQueryParamsDto,
     @Req() request: Request
   ) {
-    return await this.expenseService.getExpense(params, request);
+    return await this.expenseService.getExpenses(params, request);
   }
 
   @Post()

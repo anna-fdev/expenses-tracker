@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
-import { createExpenseDto } from './generate-expense';
+import { generateExpense } from './generate-expense';
 import process from 'process';
 
 const prisma = new PrismaClient();
@@ -12,12 +12,12 @@ async function main() {
   const salt = await bcrypt.genSalt(BCRYPT_SALT_VALUE);
   const hashedPassword = await bcrypt.hash(ALPHA_USER_PASSWORD, salt);
 
-  const expenses = [];
+  const fakeExpenses = [];
 
   for (let i = 0; i < 20; i++) {
-    const { name, amount, category, expense_date } = createExpenseDto();
+    const { name, amount, category, expense_date } = generateExpense();
 
-    expenses.push({
+    fakeExpenses.push({
       name,
       amount,
       category,
@@ -32,7 +32,7 @@ async function main() {
       email: ALPHA_USER_EMAIL,
       password: hashedPassword,
       expenses: {
-        create: expenses,
+        create: fakeExpenses,
       },
     },
   });

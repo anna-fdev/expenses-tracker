@@ -9,7 +9,11 @@ const { SERVER_PORT = 3000 } = process.env;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    })
+  );
 
   const globalPrefix = 'api';
 

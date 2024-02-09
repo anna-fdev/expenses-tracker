@@ -3,7 +3,9 @@ import { IsNumber, IsOptional, Max, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class EntitiesListQueryParamsDto {
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    description: 'Skip a certain amount of records. Min value is 0 (default)',
+  })
   @IsOptional()
   @Type(() => Number)
   @IsNumber()
@@ -12,7 +14,7 @@ export class EntitiesListQueryParamsDto {
 
   @ApiPropertyOptional({
     description:
-      'Amount of records. Min value is 1, Max value is 100 (default)',
+      'Select certain amount of records. Min value is 1, Max value is 100 (default)',
   })
   @IsOptional()
   @Type(() => Number)
