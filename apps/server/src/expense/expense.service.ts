@@ -1,10 +1,29 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.servise';
 import { CUExpenseParams, ExpenseDto } from './dto/expense.dto';
 import { Request } from 'express';
 import { getHeaderAuthToken, transform } from '../utils';
 import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '@prisma/client';
+import { ExpenseQueryParamsDto } from './dto/expense-query-params.dto';
+import { getStartOfMonth } from '../utils/get-start-of-month';
+import { LIMIT, OFFSET } from '../constants';
+
+export type ApiListMeta = {
+  total: number;
+  limit: number;
+  offset: number;
+};
+
+export type ApiEntryList<Entry> = {
+  metadata: ApiListMeta;
+  entries: Entry[];
+};
 
 @Injectable()
 export class ExpenseService {
@@ -13,16 +32,53 @@ export class ExpenseService {
     private readonly prisma: PrismaService
   ) {}
 
-  async getExpense(request: Request): Promise<ExpenseDto[]> {
+  async getExpenses(
+    params: ExpenseQueryParamsDto,
+    request: Request
+  ): Promise<ApiEntryList<ExpenseDto>> {
     const token = getHeaderAuthToken(request);
+    const { id: user_id } = this.jwtService.decode(token);
+    const { offset = OFFSET, limit = LIMIT, start_date, end_date } = params;
 
-    const { id: userId } = this.jwtService.decode(token);
+    const endDate = end_date ? new Date(end_date) : new Date().toISOString();
+    const startDate = start_date ? new Date(start_date) : getStartOfMonth();
 
-    const expense = await this.prisma.expense.findMany({
-      where: { userId },
-    });
+    const [total, expenses] = await this.prisma.$transaction([
+      this.prisma.expense.count({
+        where: {
+          user_id,
+        },
+      }),
+      this.prisma.expense.findMany({
+        where: {
+          user_id,
+          expense_date: {
+            lte: endDate,
+            gte: startDate,
+          },
+        },
+        take: limit,
+        skip: offset,
+      }),
+    ]);
 
-    return expense.map((item) => transform(ExpenseDto, item));
+    const requestedOffsetTooBig = offset >= total;
+
+    if (requestedOffsetTooBig) {
+      throw new HttpException(
+        'Offset is bigger than total documents amount',
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
+    return {
+      metadata: {
+        total,
+        offset,
+        limit,
+      },
+      entries: expenses.map((item) => transform(ExpenseDto, item)),
+    };
   }
 
   async createExpense(data: CUExpenseParams, request: Request) {
@@ -33,7 +89,7 @@ export class ExpenseService {
     const createdExpense = await this.prisma.expense.create({
       data: {
         ...data,
-        userId: Number(id),
+        user_id: Number(id),
       },
     });
 
@@ -43,14 +99,14 @@ export class ExpenseService {
   async updateExpense(id: string, data: CUExpenseParams, request: Request) {
     const token = getHeaderAuthToken(request);
 
-    const { id: userId } = this.jwtService.decode(token);
+    const { id: user_id } = this.jwtService.decode(token);
 
     const updatedExpense = await this.prisma.expense
       .update({
-        where: { id, userId },
+        where: { id, user_id },
         data: {
           ...data,
-          userId,
+          user_id,
         },
       })
       .catch((error) => {
@@ -69,11 +125,11 @@ export class ExpenseService {
   async deleteExpense(id: string, request: Request) {
     const token = getHeaderAuthToken(request);
 
-    const { id: userId } = this.jwtService.decode(token);
+    const { id: user_id } = this.jwtService.decode(token);
 
     const deletedExpense = await this.prisma.expense
       .delete({
-        where: { id, userId },
+        where: { id, user_id },
       })
       .catch((error) => {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
