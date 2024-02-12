@@ -31,7 +31,9 @@ export class ExpenseDto {
   id: number;
 
   @Type(() => DecimalNumber)
-  @ApiProperty()
+  @ApiProperty({
+    type: Number,
+  })
   @Expose()
   @Transform(({ obj, key }) => Number(obj[key]))
   amount: DecimalNumber;

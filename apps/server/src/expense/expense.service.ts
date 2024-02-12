@@ -9,10 +9,10 @@ import { CUExpenseParams, ExpenseDto } from './dto/expense.dto';
 import { Request } from 'express';
 import { getHeaderAuthToken, transform } from '../utils';
 import { JwtService } from '@nestjs/jwt';
-import { Prisma } from '@prisma/client';
 import { ExpenseQueryParamsDto } from './dto/expense-query-params.dto';
 import { getStartOfMonthISO } from '../utils/get-start-of-month-iso';
 import { LIMIT, OFFSET } from '../constants';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 export type ApiListMeta = {
   total: number;
@@ -110,7 +110,7 @@ export class ExpenseService {
         },
       })
       .catch((error) => {
-        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error instanceof PrismaClientKnownRequestError) {
           if (error.code === 'P2025' || error.code === 'P2016') {
             throw new NotFoundException(`Can't find a record with id ${id}`);
           }
@@ -132,7 +132,7 @@ export class ExpenseService {
         where: { id, user_id },
       })
       .catch((error) => {
-        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error instanceof PrismaClientKnownRequestError) {
           if (error.code === 'P2025' || error.code === 'P2016') {
             throw new NotFoundException(`Can't find a record with id ${id}`);
           }
