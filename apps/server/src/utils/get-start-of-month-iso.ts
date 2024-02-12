@@ -1,4 +1,4 @@
-export const getStartOfMonth = () => {
+export const getStartOfMonthISO = () => {
   const currentDate = new Date();
 
   currentDate.setDate(1);

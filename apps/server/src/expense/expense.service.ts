@@ -11,7 +11,7 @@ import { getHeaderAuthToken, transform } from '../utils';
 import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '@prisma/client';
 import { ExpenseQueryParamsDto } from './dto/expense-query-params.dto';
-import { getStartOfMonth } from '../utils/get-start-of-month';
+import { getStartOfMonthISO } from '../utils/get-start-of-month-iso';
 import { LIMIT, OFFSET } from '../constants';
 
 export type ApiListMeta = {
@@ -41,7 +41,7 @@ export class ExpenseService {
     const { offset = OFFSET, limit = LIMIT, start_date, end_date } = params;
 
     const endDate = end_date ? new Date(end_date) : new Date().toISOString();
-    const startDate = start_date ? new Date(start_date) : getStartOfMonth();
+    const startDate = start_date ? new Date(start_date) : getStartOfMonthISO();
 
     const [total, expenses] = await this.prisma.$transaction([
       this.prisma.expense.count({
