@@ -1,9 +1,11 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
-import { UserService } from './user.service';
-import { AuthGuard } from '../guards/auth.guard';
-import { UserDto } from './dto/user-dto';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+
+import { AuthGuard } from '../guards/auth.guard';
+
+import { UserService } from './user.service';
+import { UserDto } from './dto/user-dto';
 
 @ApiTags('user')
 @Controller('user')
