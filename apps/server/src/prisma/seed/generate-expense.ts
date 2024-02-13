@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
-import { ExpenseDto } from '../../expense/dto/expense.dto';
 import { Decimal } from '@prisma/client/runtime/library';
+
+import { ExpenseDto } from '../../expense/dto/expense.dto';
 
 export const generateExpense = () => {
   const fakeExpense = new ExpenseDto();
