@@ -1,3 +1,5 @@
+import process from 'process';
+
 import {
   HttpException,
   HttpStatus,
@@ -5,17 +7,17 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.servise';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { getHeaderAuthToken } from '../utils';
-
 import { Request } from 'express';
-import { AuthParamsDto, SignUpResponseDto } from '../auth/dto/auth-dto';
-import { UserDto } from './dto/user-dto';
 import { plainToInstance } from 'class-transformer';
+
+import { PrismaService } from '../prisma/prisma.servise';
+import { getHeaderAuthToken } from '../utils';
+import { AuthParamsDto, SignUpResponseDto } from '../auth/dto/auth-dto';
+
+import { UserDto } from './dto/user-dto';
 import { TokenDto } from './dto/token-dto';
-import process from 'process';
 
 const { BCRYPT_SALT_VALUE } = process.env;
 

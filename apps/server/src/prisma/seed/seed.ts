@@ -1,7 +1,9 @@
+import process from 'process';
+
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+
 import { generateExpense } from './generate-expense';
-import process from 'process';
 
 const prisma = new PrismaClient();
 

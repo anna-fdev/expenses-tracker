@@ -1,3 +1,5 @@
+import process from 'process';
+
 import {
   CanActivate,
   ExecutionContext,
@@ -5,7 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import process from 'process';
+
 import { getHeaderAuthToken } from '../utils';
 
 const { JWT_SECRET } = process.env;
