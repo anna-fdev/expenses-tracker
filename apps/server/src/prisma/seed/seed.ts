@@ -3,15 +3,16 @@ import process from 'process';
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
+import { getSalt } from '../../utils/get-salt';
+
 import { generateExpense } from './generate-expense';
 
 const prisma = new PrismaClient();
 
-const { ALPHA_USER_EMAIL, ALPHA_USER_PASSWORD, BCRYPT_SALT_VALUE } =
-  process.env;
+const { ALPHA_USER_EMAIL, ALPHA_USER_PASSWORD } = process.env;
 
 async function main() {
-  const salt = await bcrypt.genSalt(BCRYPT_SALT_VALUE);
+  const salt = await getSalt();
   const hashedPassword = await bcrypt.hash(ALPHA_USER_PASSWORD, salt);
 
   const fakeExpenses = [];
