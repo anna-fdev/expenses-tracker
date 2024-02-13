@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
+
 import { theme } from '../assets/createTheme';
 
 export default function SignUp() {

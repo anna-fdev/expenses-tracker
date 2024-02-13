@@ -1,8 +1,9 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
-import Categories from '../components/Categories';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+
+import Categories from '../components/Categories';
 
 const AddExpense = () => {
   return (

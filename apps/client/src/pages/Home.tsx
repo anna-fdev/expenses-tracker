@@ -1,11 +1,12 @@
 import React from 'react';
-import Pie from '../components/Pie';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import { Add, CurrencyExchange } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { Stack } from '@mui/material';
 import Container from '@mui/material/Container';
+
+import Pie from '../components/Pie';
 
 const Home = () => {
   return (

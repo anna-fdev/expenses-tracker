@@ -4,8 +4,9 @@ import Typography from '@mui/material/Typography';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import { Link } from 'react-router-dom';
 import Toolbar from '@mui/material/Toolbar';
-import { theme } from '../assets/createTheme';
 import { ThemeProvider } from '@mui/material/styles';
+
+import { theme } from '../assets/createTheme';
 
 function Copyright() {
   return (

@@ -13,6 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import { Link } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
+
 import { theme } from '../assets/createTheme';
 
 const pages = ['Add-Expense', 'Expense-Details', 'Settings'];
