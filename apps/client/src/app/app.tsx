@@ -1,27 +1,30 @@
 import { Route, Routes } from 'react-router-dom';
-import Header from '../components/Header';
-import Home from '../pages/Home';
-import SignUp from '../pages/SignUp';
-import SignIn from '../pages/SignIn';
-import Footer from '../components/Footer';
+import { ThemeProvider } from '@mui/material';
+import * as React from 'react';
+import { FC } from 'react';
+import { Provider } from 'react-redux';
+import CssBaseline from '@mui/material/CssBaseline';
 
-export function App() {
+import { SignUp } from './pages/sign-up';
+import { Header } from './components';
+import { theme } from './utils';
+import { ROUTES } from './constants';
+import { Home } from './pages/home';
+import { store } from './store/store';
+
+export const App: FC = () => {
   return (
-    <div>
-      <div role="navigation">
-        <Header />
-      </div>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/sign-in" element={<SignIn />} />
-      </Routes>
-      <div role="footer">
-        <Footer />
-      </div>
-      {/* END: routes */}
-    </div>
-  );
-}
+    <ThemeProvider theme={theme}>
+      <Provider store={store}>
+        <CssBaseline />
 
-export default App;
+        <Header />
+
+        <Routes>
+          <Route path={ROUTES.HOME} element={<Home />} />
+          <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
+        </Routes>
+      </Provider>
+    </ThemeProvider>
+  );
+};
