@@ -1,6 +1,5 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 
-// import { bReducer } from './slices';
 import { exampleApi } from './services';
 import { exampleReducer } from './slices';
 // import { listenerMiddleware } from './listeners/listener-middleware';
