@@ -1,8 +1,9 @@
 import { Expose } from 'class-transformer';
 import { IsNumber, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { ApiUser } from '@expenses-tracker/api-models';
 
-export class UserDto {
+export class UserDto implements ApiUser {
   @IsNumber()
   @ApiProperty()
   @Expose()

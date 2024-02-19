@@ -1,3 +1,2 @@
 export * from './example-api';
-export * from './expenses-api';
-export * from './auth-api';
+export * from './common-api';
