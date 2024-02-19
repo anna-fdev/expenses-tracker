@@ -20,6 +20,7 @@ async function bootstrap() {
   const globalPrefix = 'api';
 
   app.setGlobalPrefix(globalPrefix);
+  app.enableCors();
 
   const config = new DocumentBuilder()
     .setTitle('Expenses API')

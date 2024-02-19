@@ -6,3 +6,7 @@
 ```
 docker-compose up
 ```
+
+```
+yarn install
+```

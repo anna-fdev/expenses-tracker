@@ -1,10 +1,11 @@
 import { IsEmail, IsStrongPassword } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { ApiAuthParams } from '@expenses-tracker/api-models';
 
 import { UserDto } from '../../user/dto/user-dto';
 import { TokenDto } from '../../user/dto/token-dto';
 
-export class AuthParamsDto {
+export class AuthParamsDto implements ApiAuthParams {
   @ApiProperty()
   @IsEmail()
   email: string;

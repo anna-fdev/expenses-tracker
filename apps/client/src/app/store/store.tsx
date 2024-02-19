@@ -1,6 +1,6 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 
-import { exampleApi } from './services';
+import { authApi, exampleApi, expensesApi } from './services';
 import { exampleReducer } from './slices';
 // import { listenerMiddleware } from './listeners/listener-middleware';
 // import './listeners';
@@ -8,10 +8,16 @@ import { exampleReducer } from './slices';
 export const store = configureStore({
   reducer: {
     [exampleApi.reducerPath]: exampleApi.reducer,
+    [expensesApi.reducerPath]: expensesApi.reducer,
+    [authApi.reducerPath]: authApi.reducer,
     example: exampleReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(exampleApi.middleware),
+    getDefaultMiddleware().concat([
+      exampleApi.middleware,
+      expensesApi.middleware,
+      authApi.middleware,
+    ]),
   // .prepend(listenerMiddleware.middleware),
   devTools: true,
 });

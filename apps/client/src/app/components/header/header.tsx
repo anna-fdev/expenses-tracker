@@ -21,10 +21,25 @@ export const Header: FC = () => {
           <Box
             component={Link}
             to={ROUTES.HOME}
-            sx={{ display: 'flex', alignItems: 'center' }}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              textDecoration: 'none',
+              color: 'secondary.main',
+            }}
           >
-            <AccountBalanceWalletIcon sx={{ mr: 2 }} />
-            <Typography variant="h5">EXPENSES</Typography>
+            <AccountBalanceWalletIcon sx={{ display: 'flex', mr: 1 }} />
+            <Typography
+              noWrap
+              variant="h6"
+              sx={{
+                display: 'flex',
+                fontFamily: 'monospace',
+                fontWeight: 700,
+              }}
+            >
+              EXPENSES
+            </Typography>
           </Box>
 
           <Button
