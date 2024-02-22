@@ -11,6 +11,9 @@ import { theme } from './utils';
 import { ROUTES } from './constants';
 import { Home } from './pages/home';
 import { store } from './store/store';
+import { initAppAction } from './store/actions';
+
+store.dispatch(initAppAction());
 
 export const App: FC = () => {
   return (

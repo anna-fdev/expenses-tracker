@@ -15,10 +15,13 @@ const systemSlice = createSlice({
     setAuthToken: (state, action) => {
       state.authToken = action.payload;
     },
+    resetAuthToken: (state) => {
+      state.authToken = undefined;
+    },
   },
 });
 
-export const { setAuthToken } = systemSlice.actions;
+export const { setAuthToken, resetAuthToken } = systemSlice.actions;
 
 export const selectSystem = createSelector(
   (state: AppState) => state.system,

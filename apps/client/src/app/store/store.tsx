@@ -2,8 +2,8 @@ import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 
 import { commonApi, exampleApi } from './services';
 import { exampleReducer, systemReducer } from './slices';
-// import { listenerMiddleware } from './listeners/listener-middleware';
-// import './listeners';
+import { listenerMiddleware } from './listeners/listener-middleware';
+import './listeners';
 
 export const store = configureStore({
   reducer: {
@@ -13,11 +13,9 @@ export const store = configureStore({
     system: systemReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat([
-      exampleApi.middleware,
-      commonApi.middleware,
-    ]),
-  // .prepend(listenerMiddleware.middleware),
+    getDefaultMiddleware()
+      .concat([exampleApi.middleware, commonApi.middleware])
+      .prepend(listenerMiddleware.middleware),
   devTools: true,
 });
 
