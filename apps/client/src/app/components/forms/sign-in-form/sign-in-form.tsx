@@ -9,14 +9,14 @@ import {
   Typography,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import { useSignUpMutation } from '../../../store/services';
+import { useSignInMutation } from '../../../store/services';
 import { ROUTES } from '../../../constants';
 
-const SignUpFormSchema = Yup.object().shape({
+const SignInFormSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Required'),
   password: Yup.string().min(5, 'Password is too Short!').required('Required'),
 });
@@ -26,17 +26,22 @@ type FormValues = {
   password: string;
 };
 
-export const SignUpForm: FC = () => {
-  const [signUp, result] = useSignUpMutation();
+export const SignInForm: FC = () => {
+  const [signIn] = useSignInMutation();
+  const navigate = useNavigate();
 
   const formik = useFormik<FormValues>({
     initialValues: {
       email: '',
       password: '',
     },
-    validationSchema: SignUpFormSchema,
-    onSubmit: (values, formikHelpers) => {
-      signUp(values);
+    validationSchema: SignInFormSchema,
+    onSubmit: async (values, formikHelpers) => {
+      const response = await signIn(values);
+
+      if ('data' in response && response.data.token) {
+        navigate(ROUTES.HOME);
+      }
     },
   });
 
@@ -53,14 +58,9 @@ export const SignUpForm: FC = () => {
         <LockOutlinedIcon />
       </Avatar>
       <Typography component="h1" variant="h5">
-        Sign up
+        Sign in
       </Typography>
-      <Box
-        component="form"
-        noValidate
-        onSubmit={formik.handleSubmit}
-        sx={{ mt: 3 }}
-      >
+      <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 3 }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
@@ -99,11 +99,11 @@ export const SignUpForm: FC = () => {
           color="secondary"
           sx={{ mt: 3, mb: 2 }}
         >
-          Sign Up
+          Sign In
         </Button>
         <Grid container justifyContent="flex-end">
           <Grid item>
-            <Link to={ROUTES.SIGN_IN}>Already have an account? Sign in</Link>
+            <Link to={ROUTES.SIGN_UP}>Do not have an account? Sign up</Link>
           </Grid>
         </Grid>
       </Box>

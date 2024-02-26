@@ -12,6 +12,7 @@ import { ROUTES } from './constants';
 import { Home } from './pages/home';
 import { store } from './store/store';
 import { initAppAction } from './store/actions';
+import { SignIn } from './pages/sign-in';
 
 store.dispatch(initAppAction());
 
@@ -26,6 +27,7 @@ export const App: FC = () => {
         <Routes>
           <Route path={ROUTES.HOME} element={<Home />} />
           <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
+          <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
         </Routes>
       </Provider>
     </ThemeProvider>

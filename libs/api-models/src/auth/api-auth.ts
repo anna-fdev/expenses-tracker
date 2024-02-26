@@ -9,3 +9,7 @@ export type ApiSignUpResponse = {
   token: string;
   user: ApiUser;
 };
+
+export type ApiSignInResponse = {
+  token: string;
+};

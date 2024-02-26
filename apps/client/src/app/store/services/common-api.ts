@@ -5,7 +5,11 @@ import {
   fetchBaseQuery,
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react';
-import { ApiAuthParams, ApiSignUpResponse } from '@expenses-tracker/api-models';
+import {
+  ApiAuthParams,
+  ApiSignInResponse,
+  ApiSignUpResponse,
+} from '@expenses-tracker/api-models';
 
 import { resetAuthToken, setAuthToken } from '../slices';
 import { AppState } from '../store';
@@ -65,7 +69,28 @@ export const commonApi = createApi({
 
           dispatch(setAuthToken(token));
         } catch (error) {
-          // do nothing
+          // TODO handle the error here
+        }
+      },
+    }),
+    signIn: builder.mutation<ApiSignInResponse, ApiAuthParams>({
+      query: (params) => ({
+        url: '/auth/sign-in',
+        method: 'POST',
+        body: params,
+      }),
+      onQueryStarted: async (arg, { queryFulfilled, dispatch }) => {
+        try {
+          const {
+            data: { token },
+          } = await queryFulfilled;
+
+          // this is not a secure way to handle `authToken` storing, but this is not the purpose of this Demo
+          localStorage.setItem(authToken, token);
+
+          dispatch(setAuthToken(token));
+        } catch (error) {
+          // TODO handle the error here
         }
       },
     }),
@@ -75,4 +100,5 @@ export const commonApi = createApi({
   }),
 });
 
-export const { useSignUpMutation, useGetExpensesQuery } = commonApi;
+export const { useSignUpMutation, useSignInMutation, useGetExpensesQuery } =
+  commonApi;

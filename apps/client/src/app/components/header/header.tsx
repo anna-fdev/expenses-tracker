@@ -41,15 +41,26 @@ export const Header: FC = () => {
               EXPENSES
             </Typography>
           </Box>
+          <Box>
+            <Button
+              component={Link}
+              color="secondary"
+              variant="contained"
+              to={ROUTES.SIGN_UP}
+              sx={{ mr: 2 }}
+            >
+              Sign Up
+            </Button>
 
-          <Button
-            component={Link}
-            color="secondary"
-            variant="contained"
-            to={ROUTES.SIGN_UP}
-          >
-            Sign Up
-          </Button>
+            <Button
+              component={Link}
+              color="secondary"
+              variant="contained"
+              to={ROUTES.SIGN_IN}
+            >
+              Sign In
+            </Button>
+          </Box>
         </Toolbar>
       </Container>
     </AppBar>
