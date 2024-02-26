@@ -2,12 +2,14 @@ import * as React from 'react';
 import { FC } from 'react';
 import { Container } from '@mui/material';
 
-import { SignUpForm } from '../components/forms';
+import { SignInForm } from '../components/forms';
 
-export const SignUp: FC = () => {
+export const SignIn: FC = () => {
+  // TODO redirect authorized user to `home page`
+
   return (
     <Container component="main" maxWidth="xs">
-      <SignUpForm />
+      <SignInForm />
     </Container>
   );
 };

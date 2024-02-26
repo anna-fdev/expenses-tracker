@@ -1,18 +1,21 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 
-import { exampleApi } from './services';
-import { exampleReducer } from './slices';
-// import { listenerMiddleware } from './listeners/listener-middleware';
-// import './listeners';
+import { commonApi, exampleApi } from './services';
+import { exampleReducer, systemReducer } from './slices';
+import { listenerMiddleware } from './listeners/listener-middleware';
+import './listeners';
 
 export const store = configureStore({
   reducer: {
     [exampleApi.reducerPath]: exampleApi.reducer,
+    [commonApi.reducerPath]: commonApi.reducer,
     example: exampleReducer,
+    system: systemReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(exampleApi.middleware),
-  // .prepend(listenerMiddleware.middleware),
+    getDefaultMiddleware()
+      .concat([exampleApi.middleware, commonApi.middleware])
+      .prepend(listenerMiddleware.middleware),
   devTools: true,
 });
 

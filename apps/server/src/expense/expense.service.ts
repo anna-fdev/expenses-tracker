@@ -9,8 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 import { PrismaService } from '../prisma/prisma.servise';
-import { getHeaderAuthToken, transform } from '../utils';
-import { getStartOfMonthISO } from '../utils/get-start-of-month-iso';
+import { getHeaderAuthToken, getStartOfMonthISO, transform } from '../utils';
 import { LIMIT, OFFSET } from '../constants';
 
 import { ExpenseQueryParamsDto } from './dto/expense-query-params.dto';
@@ -64,7 +63,7 @@ export class ExpenseService {
       }),
     ]);
 
-    const requestedOffsetTooBig = offset >= total;
+    const requestedOffsetTooBig = offset > total;
 
     if (requestedOffsetTooBig) {
       throw new HttpException(

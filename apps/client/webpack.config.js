@@ -1,9 +1,13 @@
 const { composePlugins, withNx } = require('@nx/webpack');
 const { withReact } = require('@nx/react');
+const webpack = require('webpack');
 
-// Nx plugins for webpack.
 module.exports = composePlugins(withNx(), withReact(), (config) => {
-  // Update the webpack config as needed here.
-  // e.g. `config.plugins.push(new MyPlugin())`
+  config.plugins.push(
+    new webpack.DefinePlugin({
+      'process.env.SERVER_API_URL': JSON.stringify(process.env.SERVER_API_URL),
+    })
+  );
+
   return config;
 });

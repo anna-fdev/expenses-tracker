@@ -19,7 +19,7 @@ import { CUExpenseParams, ExpenseDto } from './dto/expense.dto';
 import { ExpenseQueryParamsDto } from './dto/expense-query-params.dto';
 
 @ApiTags('expense')
-@Controller('expense')
+@Controller('expenses')
 export class ExpenseController {
   constructor(private expenseService: ExpenseService) {}
 
