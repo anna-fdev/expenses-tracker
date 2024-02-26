@@ -94,11 +94,18 @@ export const commonApi = createApi({
         }
       },
     }),
+    getUserMeData: builder.query<any, void>({
+      query: () => '/user/me',
+    }),
     getExpenses: builder.query<any, void>({
       query: () => '/expenses',
     }),
   }),
 });
 
-export const { useSignUpMutation, useSignInMutation, useGetExpensesQuery } =
-  commonApi;
+export const {
+  useSignUpMutation,
+  useSignInMutation,
+  useGetUserMeDataQuery,
+  useGetExpensesQuery,
+} = commonApi;
