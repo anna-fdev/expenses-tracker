@@ -1,5 +1,3 @@
-import process from 'process';
-
 import {
   HttpException,
   HttpStatus,
@@ -13,9 +11,8 @@ import { Request } from 'express';
 import { plainToInstance } from 'class-transformer';
 
 import { PrismaService } from '../prisma/prisma.servise';
-import { getHeaderAuthToken } from '../utils';
+import { getHeaderAuthToken, getSalt, transform } from '../utils';
 import { AuthParamsDto, SignUpResponseDto } from '../auth/dto/auth-dto';
-import { getSalt } from '../utils/get-salt';
 
 import { UserDto } from './dto/user-dto';
 import { TokenDto } from './dto/token-dto';
@@ -105,8 +102,7 @@ export class UserService {
       throw new Error(`User with ID ${id} not found`);
     }
 
-    // TODO make a common helper
-    return plainToInstance(UserDto, user, { strategy: 'excludeAll' });
+    return transform(UserDto, user);
   }
 
   /**

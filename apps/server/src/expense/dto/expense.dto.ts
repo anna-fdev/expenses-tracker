@@ -1,6 +1,7 @@
 import { Expose, Transform, Type } from 'class-transformer';
 import { IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiExpense } from '@expenses-tracker/api-models';
 
 import { DecimalNumber } from '../../utils';
 
@@ -26,7 +27,14 @@ export class CUExpenseParams {
   expense_date: Date;
 }
 
-export class ExpenseDto {
+type ExpenseType = Pick<
+  ApiExpense,
+  'id' | 'name' | 'category' | 'expense_date'
+> & {
+  amount: DecimalNumber;
+};
+
+export class ExpenseDto implements ExpenseType {
   @IsNumber()
   @Expose()
   id: number;

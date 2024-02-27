@@ -1,23 +1,22 @@
 import React from 'react';
-import { Box } from '@mui/material';
 import Container from '@mui/material/Container';
+import { Typography } from '@mui/material';
 
-import {
-  useGetExamplePostsQuery,
-  useGetExpensesQuery,
-} from '../store/services';
+import { useUserLoggedIn } from '../store/hooks';
+import { ExpenseList } from '../components';
 
 export const Home = () => {
-  const { data, isLoading } = useGetExamplePostsQuery();
-
-  useGetExpensesQuery();
+  const isLoggedIn = useUserLoggedIn();
 
   return (
     <Container maxWidth="lg">
-      {data === undefined && isLoading && <>loading...</>}
-
-      {data?.length &&
-        data.map((post: any) => <Box key={post.id}>{post.title}</Box>)}
+      {isLoggedIn ? (
+        <ExpenseList />
+      ) : (
+        <Typography component="h4" textAlign="center">
+          Please Sign In
+        </Typography>
+      )}
     </Container>
   );
 };

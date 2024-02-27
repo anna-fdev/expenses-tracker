@@ -7,8 +7,11 @@ import {
 } from '@reduxjs/toolkit/query/react';
 import {
   ApiAuthParams,
+  ApiEntryList,
+  ApiExpense,
   ApiSignInResponse,
   ApiSignUpResponse,
+  ApiUser,
 } from '@expenses-tracker/api-models';
 
 import { resetAuthToken, setAuthToken } from '../slices';
@@ -69,7 +72,7 @@ export const commonApi = createApi({
 
           dispatch(setAuthToken(token));
         } catch (error) {
-          // TODO handle the error here
+          console.error(error);
         }
       },
     }),
@@ -90,15 +93,22 @@ export const commonApi = createApi({
 
           dispatch(setAuthToken(token));
         } catch (error) {
-          // TODO handle the error here
+          console.error(error);
         }
       },
     }),
-    getExpenses: builder.query<any, void>({
+    getUserMeData: builder.query<ApiUser, void>({
+      query: () => '/user/me',
+    }),
+    getExpenses: builder.query<ApiEntryList<ApiExpense>, void>({
       query: () => '/expenses',
     }),
   }),
 });
 
-export const { useSignUpMutation, useSignInMutation, useGetExpensesQuery } =
-  commonApi;
+export const {
+  useSignUpMutation,
+  useSignInMutation,
+  useGetUserMeDataQuery,
+  useGetExpensesQuery,
+} = commonApi;

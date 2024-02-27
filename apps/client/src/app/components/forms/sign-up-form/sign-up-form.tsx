@@ -35,10 +35,12 @@ export const SignUpForm: FC = () => {
       password: '',
     },
     validationSchema: SignUpFormSchema,
-    onSubmit: (values, formikHelpers) => {
+    onSubmit: (values) => {
       signUp(values);
     },
   });
+
+  // console.log(result); // TODO handle error here
 
   return (
     <Box
