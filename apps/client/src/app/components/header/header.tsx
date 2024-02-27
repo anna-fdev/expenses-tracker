@@ -12,8 +12,18 @@ import {
 } from '@mui/material';
 
 import { ROUTES } from '../../constants';
+import { useAppDispatch, useUserMe } from '../../store/hooks';
+import { resetAuthToken } from '../../store/slices';
 
 export const Header: FC = () => {
+  const { data: userMeData } = useUserMe();
+
+  const dispatch = useAppDispatch();
+
+  const handleLogout = () => {
+    dispatch(resetAuthToken());
+  };
+
   return (
     <AppBar position="static">
       <Container maxWidth="lg">
@@ -41,26 +51,41 @@ export const Header: FC = () => {
               EXPENSES
             </Typography>
           </Box>
-          <Box>
-            <Button
-              component={Link}
-              color="secondary"
-              variant="contained"
-              to={ROUTES.SIGN_UP}
-              sx={{ mr: 2 }}
-            >
-              Sign Up
-            </Button>
+          {userMeData ? (
+            <Box>
+              <Button
+                component={Link}
+                color="secondary"
+                variant="contained"
+                to={ROUTES.HOME}
+                sx={{ mr: 2 }}
+                onClick={handleLogout}
+              >
+                Log Out
+              </Button>
+            </Box>
+          ) : (
+            <Box>
+              <Button
+                component={Link}
+                color="secondary"
+                variant="contained"
+                to={ROUTES.SIGN_UP}
+                sx={{ mr: 2 }}
+              >
+                Sign Up
+              </Button>
 
-            <Button
-              component={Link}
-              color="secondary"
-              variant="contained"
-              to={ROUTES.SIGN_IN}
-            >
-              Sign In
-            </Button>
-          </Box>
+              <Button
+                component={Link}
+                color="secondary"
+                variant="contained"
+                to={ROUTES.SIGN_IN}
+              >
+                Sign In
+              </Button>
+            </Box>
+          )}
         </Toolbar>
       </Container>
     </AppBar>

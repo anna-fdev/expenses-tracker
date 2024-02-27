@@ -1,10 +1,10 @@
-import { useSelector } from 'react-redux';
-
 import { useGetUserMeDataQuery } from '../services';
-import { selectSystem } from '../slices';
+import { AppState } from '../store';
+
+import { useAppSelector } from './common';
 
 export const useUserMe = () => {
-  const { authToken } = useSelector(selectSystem);
+  const { authToken } = useAppSelector((state: AppState) => state.system);
 
   const { data, error, isLoading } = useGetUserMeDataQuery(undefined, {
     skip: !authToken,
@@ -20,4 +20,10 @@ export const useUserMe = () => {
     error,
     isLoading,
   };
+};
+
+export const useUserLoggedIn = (): boolean => {
+  const { data } = useUserMe();
+
+  return Boolean(data);
 };

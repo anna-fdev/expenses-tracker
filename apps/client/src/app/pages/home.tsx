@@ -1,12 +1,22 @@
 import React from 'react';
 import Container from '@mui/material/Container';
+import { Typography } from '@mui/material';
 
-import { useUserMe } from '../store/hooks';
+import { useUserLoggedIn } from '../store/hooks';
+import { ExpenseList } from '../components';
 
 export const Home = () => {
-  const { data: userMeData } = useUserMe();
+  const isLoggedIn = useUserLoggedIn();
 
   return (
-    <Container maxWidth="lg">{userMeData && <>{userMeData.email}</>}</Container>
+    <Container maxWidth="lg">
+      {isLoggedIn ? (
+        <ExpenseList />
+      ) : (
+        <Typography component="h4" textAlign="center">
+          Please Sign In
+        </Typography>
+      )}
+    </Container>
   );
 };

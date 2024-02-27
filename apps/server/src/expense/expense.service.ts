@@ -7,6 +7,7 @@ import {
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { ApiEntryList } from '@expenses-tracker/api-models';
 
 import { PrismaService } from '../prisma/prisma.servise';
 import { getHeaderAuthToken, getStartOfMonthISO, transform } from '../utils';
@@ -14,17 +15,6 @@ import { LIMIT, OFFSET } from '../constants';
 
 import { ExpenseQueryParamsDto } from './dto/expense-query-params.dto';
 import { CUExpenseParams, ExpenseDto } from './dto/expense.dto';
-
-export type ApiListMeta = {
-  total: number;
-  limit: number;
-  offset: number;
-};
-
-export type ApiEntryList<Entry> = {
-  metadata: ApiListMeta;
-  entries: Entry[];
-};
 
 @Injectable()
 export class ExpenseService {

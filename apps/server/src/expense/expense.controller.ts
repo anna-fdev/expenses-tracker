@@ -17,6 +17,7 @@ import { AuthGuard } from '../guards/auth.guard';
 import { ExpenseService } from './expense.service';
 import { CUExpenseParams, ExpenseDto } from './dto/expense.dto';
 import { ExpenseQueryParamsDto } from './dto/expense-query-params.dto';
+import { ExpenseResponse } from './dto/expenses-response.dto';
 
 @ApiTags('expense')
 @Controller('expenses')
@@ -28,7 +29,7 @@ export class ExpenseController {
   @UseGuards(AuthGuard)
   @ApiOkResponse({
     description: 'Get Expense response model',
-    type: [ExpenseDto],
+    type: ExpenseResponse,
   })
   async getExpenses(
     @Body() params: ExpenseQueryParamsDto,
