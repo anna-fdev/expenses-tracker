@@ -11,7 +11,7 @@ export const ExpenseList: FC = () => {
   return (
     <>
       {data ? (
-        <Card elevation={2}>
+        <Card elevation={2} sx={{ mt: 4 }}>
           {data.entries.map((entry) => (
             <Box key={entry.id} sx={{ p: 1 }}>
               <Stack

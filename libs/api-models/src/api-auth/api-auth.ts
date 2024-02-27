@@ -1,4 +1,4 @@
-import { ApiUser } from '../user';
+import { ApiUser } from '../api-user';
 
 export type ApiAuthParams = {
   email: string;
