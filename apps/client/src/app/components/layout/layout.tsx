@@ -9,6 +9,7 @@ import { Home } from '../../pages/home';
 import { SignUp } from '../../pages/sign-up';
 import { SignIn } from '../../pages/sign-in';
 import { useUserMe } from '../../store/hooks';
+import { SnackbarComponent } from '../snackbar-component/snackbar-component';
 
 export const Layout: FC = () => {
   useUserMe();
@@ -24,6 +25,8 @@ export const Layout: FC = () => {
         <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
         <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
       </Routes>
+
+      <SnackbarComponent />
     </>
   );
 };

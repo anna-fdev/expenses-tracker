@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import {
   Avatar,
   Box,
@@ -9,12 +9,15 @@ import {
   Typography,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { get } from 'lodash';
 
 import { useSignUpMutation } from '../../../store/services';
 import { ROUTES } from '../../../constants';
+import { useAppDispatch } from '../../../store/hooks';
+import { showSnackbar } from '../../../store/slices';
 
 const SignUpFormSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Required'),
@@ -27,7 +30,10 @@ type FormValues = {
 };
 
 export const SignUpForm: FC = () => {
+  const dispatch = useAppDispatch();
   const [signUp, result] = useSignUpMutation();
+  const navigate = useNavigate();
+  const { isError } = result;
 
   const formik = useFormik<FormValues>({
     initialValues: {
@@ -35,12 +41,31 @@ export const SignUpForm: FC = () => {
       password: '',
     },
     validationSchema: SignUpFormSchema,
-    onSubmit: (values) => {
-      signUp(values);
+    onSubmit: async (values) => {
+      const response = await signUp(values);
+
+      if ('data' in response && response.data.token) {
+        navigate(ROUTES.HOME);
+      }
     },
   });
 
-  // console.log(result); // TODO handle error here
+  useEffect(() => {
+    if (isError) {
+      const errorMessage = get(
+        result,
+        ['error', 'data', 'message'],
+        'There is an error'
+      );
+
+      dispatch(
+        showSnackbar({
+          message: errorMessage,
+          severity: 'error',
+        })
+      );
+    }
+  }, [isError]);
 
   return (
     <Box

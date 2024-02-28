@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import {
   Avatar,
   Box,
@@ -15,6 +15,8 @@ import * as Yup from 'yup';
 
 import { useSignInMutation } from '../../../store/services';
 import { ROUTES } from '../../../constants';
+import { showSnackbar } from '../../../store/slices';
+import { useAppDispatch } from '../../../store/hooks';
 
 const SignInFormSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Required'),
@@ -27,8 +29,10 @@ type FormValues = {
 };
 
 export const SignInForm: FC = () => {
-  const [signIn] = useSignInMutation();
+  const dispatch = useAppDispatch();
+  const [signIn, result] = useSignInMutation();
   const navigate = useNavigate();
+  const { isError } = result;
 
   const formik = useFormik<FormValues>({
     initialValues: {
@@ -44,6 +48,17 @@ export const SignInForm: FC = () => {
       }
     },
   });
+
+  useEffect(() => {
+    if (isError) {
+      dispatch(
+        showSnackbar({
+          message: 'Email or password is wrong!',
+          severity: 'error',
+        })
+      );
+    }
+  }, [isError]);
 
   return (
     <Box
