@@ -9,6 +9,7 @@ import {
   ApiAuthParams,
   ApiEntryList,
   ApiExpense,
+  ApiExpenseParams,
   ApiSignInResponse,
   ApiSignUpResponse,
   ApiUser,
@@ -20,6 +21,7 @@ import { authToken } from '../../constants';
 
 export const CommonApiTag = 'CommonApiTag';
 export const AuthTag = 'Auth';
+export const ExpenseTag = 'Expense';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.SERVER_API_URL,
@@ -51,7 +53,7 @@ const baseQueryWithErrorListener: BaseQueryFn<
 };
 
 export const commonApi = createApi({
-  tagTypes: [CommonApiTag, AuthTag],
+  tagTypes: [CommonApiTag, AuthTag, ExpenseTag],
   reducerPath: 'commonApi',
   baseQuery: baseQueryWithErrorListener,
   endpoints: (builder) => ({
@@ -102,6 +104,23 @@ export const commonApi = createApi({
     }),
     getExpenses: builder.query<ApiEntryList<ApiExpense>, void>({
       query: () => '/expenses',
+      providesTags: [ExpenseTag],
+    }),
+    createExpense: builder.mutation<ApiExpense, ApiExpenseParams>({
+      query: (params) => ({
+        url: '/expenses',
+        method: 'POST',
+        body: params,
+      }),
+      invalidatesTags: [ExpenseTag],
+    }),
+    updateExpense: builder.mutation<ApiExpense, ApiExpenseParams>({
+      query: (params) => ({
+        url: '/expenses',
+        method: 'PUT',
+        body: params,
+      }),
+      invalidatesTags: [ExpenseTag],
     }),
   }),
 });
@@ -111,4 +130,6 @@ export const {
   useSignInMutation,
   useGetUserMeDataQuery,
   useGetExpensesQuery,
+  useCreateExpenseMutation,
+  useUpdateExpenseMutation,
 } = commonApi;
