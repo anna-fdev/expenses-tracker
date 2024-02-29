@@ -12,11 +12,11 @@ import {
 } from '@mui/material';
 
 import { ROUTES } from '../../constants';
-import { useAppDispatch, useUserMe } from '../../store/hooks';
+import { useAppDispatch, useUserLoggedIn } from '../../store/hooks';
 import { resetAuthToken } from '../../store/slices';
 
 export const Header: FC = () => {
-  const { data: userMeData } = useUserMe();
+  const isLoggedIn = useUserLoggedIn();
 
   const dispatch = useAppDispatch();
 
@@ -51,7 +51,7 @@ export const Header: FC = () => {
               EXPENSES
             </Typography>
           </Box>
-          {userMeData ? (
+          {isLoggedIn ? (
             <Box>
               <Button
                 component={Link}

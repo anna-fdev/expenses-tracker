@@ -1,65 +1,76 @@
 import { FC } from 'react';
-import { Box, Button, Card, Grid, Stack, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
-import { Add, CurrencyExchange } from '@mui/icons-material';
+import {
+  Box,
+  Card,
+  styled,
+  Table,
+  TableBody,
+  TableCell,
+  tableCellClasses,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@mui/material';
+import { generatePath, useNavigate } from 'react-router-dom';
 
 import { useExpenses } from '../../store/hooks';
+import { ROUTES } from '../../constants';
+
+import { ExpenseControls } from './expense-controls';
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.grey.A200,
+    fontSize: '1rem',
+    fontWeight: 'bold',
+  },
+}));
 
 export const ExpenseList: FC = () => {
   const { data } = useExpenses();
+  const navigate = useNavigate();
+
+  const handleClick = (id: string) => {
+    const path = generatePath(ROUTES.EXPENSE, { id });
+
+    navigate(path);
+  };
 
   return (
     <>
       {data ? (
-        <Card elevation={2}>
-          {data.entries.map((entry) => (
-            <Box key={entry.id} sx={{ p: 1 }}>
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Typography gutterBottom component="div">
-                  {entry.category}
-                </Typography>
-                <Typography gutterBottom component="div">
-                  {entry.amount}
-                </Typography>
-              </Stack>
-            </Box>
-          ))}
+        <Card elevation={2} sx={{ mt: 4 }}>
+          <TableContainer>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell align="left">Amount</StyledTableCell>
+                  <StyledTableCell align="left">Name</StyledTableCell>
+                  <StyledTableCell align="left">Category</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data.entries.map((entry) => (
+                  <TableRow
+                    hover
+                    key={entry.id}
+                    onClick={() => handleClick(entry.id)}
+                    sx={{ cursor: 'pointer' }}
+                  >
+                    <TableCell align="left">{entry.amount}</TableCell>
+                    <TableCell align="left">{entry.name}</TableCell>
+                    <TableCell align="left">{entry.category}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Card>
       ) : (
         <Box>There is no expenses yet. Add an expense</Box>
       )}
-      <Grid
-        container
-        direction="row"
-        spacing={0}
-        mt={5}
-        justifyContent="center"
-      >
-        <Stack direction="row" spacing={2}>
-          <Button
-            component={Link}
-            to="#"
-            variant="contained"
-            color="secondary"
-            startIcon={<Add />}
-          >
-            Add new expense
-          </Button>
-          <Button
-            component={Link}
-            to="#"
-            variant="contained"
-            color="secondary"
-            startIcon={<CurrencyExchange />}
-          >
-            Expense Details
-          </Button>
-        </Stack>
-      </Grid>
+
+      <ExpenseControls />
     </>
   );
 };

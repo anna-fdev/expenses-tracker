@@ -9,7 +9,7 @@ export const Home = () => {
   const isLoggedIn = useUserLoggedIn();
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" sx={{ mb: 2 }}>
       {isLoggedIn ? (
         <ExpenseList />
       ) : (

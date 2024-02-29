@@ -27,17 +27,15 @@ export class CUExpenseParams {
   expense_date: Date;
 }
 
-type ExpenseType = Pick<
-  ApiExpense,
-  'id' | 'name' | 'category' | 'expense_date'
-> & {
+type ExpenseType = Pick<ApiExpense, 'id' | 'name' | 'category'> & {
   amount: DecimalNumber;
+  expense_date: Date;
 };
 
 export class ExpenseDto implements ExpenseType {
   @IsNumber()
   @Expose()
-  id: number;
+  id: string;
 
   @Type(() => DecimalNumber)
   @ApiProperty({
