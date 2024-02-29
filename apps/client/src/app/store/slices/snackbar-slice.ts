@@ -34,8 +34,8 @@ export const snackbarSlice = createSlice({
       state.message = action.payload.message;
       state.severity = action.payload.severity;
     },
-    hideSnackbar: (state) => {
-      state.open = false;
+    hideSnackbar: () => {
+      return initialState;
     },
   },
 });

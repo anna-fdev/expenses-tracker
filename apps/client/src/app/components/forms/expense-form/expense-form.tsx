@@ -113,7 +113,6 @@ export const ExpenseForm: FC = () => {
                 <DatePicker
                   label="Pick the date"
                   name="expense_date"
-                  defaultValue={new Date()}
                   value={formik.values.expense_date}
                   onChange={(value: unknown) => {
                     formik.setFieldValue(
