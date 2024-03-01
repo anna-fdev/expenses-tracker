@@ -17,7 +17,7 @@ import {
 
 import { resetAuthToken, setAuthToken } from '../slices';
 import { AppState } from '../store';
-import { authToken } from '../../constants';
+import { AUTH_TOKEN } from '../../constants';
 
 export const CommonApiTag = 'CommonApiTag';
 export const AuthTag = 'Auth';
@@ -69,8 +69,8 @@ export const commonApi = createApi({
             data: { token },
           } = await queryFulfilled;
 
-          // this is not a secure way to handle `authToken` storing, but this is not the purpose of this Demo
-          localStorage.setItem(authToken, token);
+          // this is not a secure way to handle `AUTH_TOKEN` storing, but this is not the purpose of this Demo
+          localStorage.setItem(AUTH_TOKEN, token);
 
           dispatch(setAuthToken(token));
         } catch (error) {
@@ -90,8 +90,8 @@ export const commonApi = createApi({
             data: { token },
           } = await queryFulfilled;
 
-          // this is not a secure way to handle `authToken` storing, but this is not the purpose of this Demo
-          localStorage.setItem(authToken, token);
+          // this is not a secure way to handle `AUTH_TOKEN` storing, but this is not the purpose of this Demo
+          localStorage.setItem(AUTH_TOKEN, token);
 
           dispatch(setAuthToken(token));
         } catch (error) {
@@ -106,6 +106,10 @@ export const commonApi = createApi({
       query: () => '/expenses',
       providesTags: [ExpenseTag],
     }),
+    getExpense: builder.query<ApiExpense, string>({
+      query: (id) => `/expenses/${id}`,
+      providesTags: [ExpenseTag],
+    }),
     createExpense: builder.mutation<ApiExpense, ApiExpenseParams>({
       query: (params) => ({
         url: '/expenses',
@@ -114,11 +118,11 @@ export const commonApi = createApi({
       }),
       invalidatesTags: [ExpenseTag],
     }),
-    updateExpense: builder.mutation<ApiExpense, ApiExpenseParams>({
-      query: (params) => ({
-        url: '/expenses',
+    updateExpense: builder.mutation<ApiExpense, ApiExpense>({
+      query: ({ id, ...rest }) => ({
+        url: `/expenses/${id}`,
         method: 'PUT',
-        body: params,
+        body: rest,
       }),
       invalidatesTags: [ExpenseTag],
     }),
@@ -128,8 +132,12 @@ export const commonApi = createApi({
 export const {
   useSignUpMutation,
   useSignInMutation,
+
   useGetUserMeDataQuery,
+
   useGetExpensesQuery,
+  useGetExpenseQuery,
+
   useCreateExpenseMutation,
   useUpdateExpenseMutation,
 } = commonApi;

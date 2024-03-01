@@ -29,6 +29,7 @@ export class ExpenseService {
   ): Promise<ApiEntryList<ExpenseDto>> {
     const token = getHeaderAuthToken(request);
     const { id: user_id } = this.jwtService.decode(token);
+
     const { offset = OFFSET, limit = LIMIT, start_date, end_date } = params;
 
     const endDate = end_date ? new Date(end_date) : new Date().toISOString();
@@ -72,9 +73,32 @@ export class ExpenseService {
     };
   }
 
+  async getExpenseById(id: string, request: Request) {
+    const token = getHeaderAuthToken(request);
+    const { id: user_id } = this.jwtService.decode(token);
+
+    const expense = await this.prisma.expense
+      .findUniqueOrThrow({
+        where: {
+          user_id,
+          id,
+        },
+      })
+      .catch((error) => {
+        if (error instanceof PrismaClientKnownRequestError) {
+          if (error.code === 'P2025' || error.code === 'P2016') {
+            throw new NotFoundException(`Can't find a record with id ${id}`);
+          }
+        }
+
+        throw error;
+      });
+
+    return transform(ExpenseDto, expense);
+  }
+
   async createExpense(data: CUExpenseParams, request: Request) {
     const token = getHeaderAuthToken(request);
-
     const { id } = this.jwtService.decode(token);
 
     const createdExpense = await this.prisma.expense.create({

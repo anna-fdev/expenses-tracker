@@ -1,19 +1,22 @@
 import * as React from 'react';
 import { FC } from 'react';
-import { Box, Button, Grid, TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs, { Dayjs } from 'dayjs';
+import { ApiExpense } from '@expenses-tracker/api-models';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 
-import { useCreateExpenseMutation } from '../../../store/services';
 import { ROUTES } from '../../../constants';
+import {
+  useCreateExpenseMutation,
+  useUpdateExpenseMutation,
+} from '../../../store/services';
 
-const CreateExpenseFormSchema = Yup.object().shape({
+const ExpenseFormSchema = Yup.object().shape({
   amount: Yup.number().positive().required(),
   name: Yup.string(),
   category: Yup.string().required(),
@@ -24,29 +27,50 @@ type FormValues = {
   amount: number;
   name?: string;
   category: string;
-  expense_date: Dayjs;
+  expense_date: Dayjs | string;
 };
 
-export const ExpenseForm: FC = () => {
+type ExpenseFormProps = {
+  existedExpense?: ApiExpense;
+};
+
+const initialValues = {
+  amount: 0,
+  name: '',
+  category: '',
+  expense_date: dayjs(),
+};
+
+export const ExpenseForm: FC<ExpenseFormProps> = ({ existedExpense }) => {
   const [createExpense] = useCreateExpenseMutation();
+  const [updateExpense] = useUpdateExpenseMutation();
   const navigate = useNavigate();
 
   const formik = useFormik<FormValues>({
     initialValues: {
-      amount: 0,
-      name: '',
-      category: '',
-      expense_date: dayjs(),
+      ...(existedExpense ? existedExpense : initialValues),
+      expense_date: existedExpense
+        ? dayjs(existedExpense.expense_date)
+        : dayjs(),
     },
-    validationSchema: CreateExpenseFormSchema,
+    validationSchema: ExpenseFormSchema,
     onSubmit: async (values, formikHelpers) => {
       const requestData = {
         ...values,
-        expense_date: values.expense_date as unknown as string,
+        expense_date: values.expense_date as string,
       };
 
       try {
-        const response = await createExpense(requestData);
+        let response;
+
+        if (existedExpense) {
+          response = await updateExpense({
+            ...requestData,
+            id: existedExpense.id,
+          });
+        } else {
+          response = await createExpense(requestData);
+        }
 
         if ('data' in response) {
           navigate(ROUTES.HOME);
@@ -55,21 +79,19 @@ export const ExpenseForm: FC = () => {
         console.error(error);
       }
     },
+    enableReinitialize: Boolean(existedExpense),
   });
 
   return (
     <Box
       sx={{
-        marginTop: 8,
+        mt: 4,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
       }}
     >
-      <Typography component="h1" variant="h5">
-        Add New Expense
-      </Typography>
-      <Box component="form" onSubmit={formik.handleSubmit} sx={{ mt: 3 }}>
+      <Box component="form" onSubmit={formik.handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <TextField
@@ -132,7 +154,7 @@ export const ExpenseForm: FC = () => {
           sx={{ mt: 3, mb: 2 }}
           fullWidth
         >
-          Add Expense
+          {existedExpense ? 'Update' : 'Create'} Expense
         </Button>
       </Box>
     </Box>
