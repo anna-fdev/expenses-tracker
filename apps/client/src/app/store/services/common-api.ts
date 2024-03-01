@@ -17,7 +17,7 @@ import {
 
 import { resetAuthToken, setAuthToken } from '../slices';
 import { AppState } from '../store';
-import { authToken } from '../../constants';
+import { AUTH_TOKEN } from '../../constants';
 
 export const CommonApiTag = 'CommonApiTag';
 export const AuthTag = 'Auth';
@@ -69,8 +69,8 @@ export const commonApi = createApi({
             data: { token },
           } = await queryFulfilled;
 
-          // this is not a secure way to handle `authToken` storing, but this is not the purpose of this Demo
-          localStorage.setItem(authToken, token);
+          // this is not a secure way to handle `AUTH_TOKEN` storing, but this is not the purpose of this Demo
+          localStorage.setItem(AUTH_TOKEN, token);
 
           dispatch(setAuthToken(token));
         } catch (error) {
@@ -90,8 +90,8 @@ export const commonApi = createApi({
             data: { token },
           } = await queryFulfilled;
 
-          // this is not a secure way to handle `authToken` storing, but this is not the purpose of this Demo
-          localStorage.setItem(authToken, token);
+          // this is not a secure way to handle `AUTH_TOKEN` storing, but this is not the purpose of this Demo
+          localStorage.setItem(AUTH_TOKEN, token);
 
           dispatch(setAuthToken(token));
         } catch (error) {
