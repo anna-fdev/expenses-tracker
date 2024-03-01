@@ -34,6 +34,7 @@ type ExpenseType = Pick<ApiExpense, 'id' | 'name' | 'category'> & {
 
 export class ExpenseDto implements ExpenseType {
   @IsNumber()
+  @ApiProperty()
   @Expose()
   id: string;
 

@@ -106,6 +106,10 @@ export const commonApi = createApi({
       query: () => '/expenses',
       providesTags: [ExpenseTag],
     }),
+    getExpense: builder.query<ApiExpense, string>({
+      query: (id) => `/expenses/${id}`,
+      providesTags: [ExpenseTag],
+    }),
     createExpense: builder.mutation<ApiExpense, ApiExpenseParams>({
       query: (params) => ({
         url: '/expenses',
@@ -114,11 +118,11 @@ export const commonApi = createApi({
       }),
       invalidatesTags: [ExpenseTag],
     }),
-    updateExpense: builder.mutation<ApiExpense, ApiExpenseParams>({
-      query: (params) => ({
-        url: '/expenses',
+    updateExpense: builder.mutation<ApiExpense, ApiExpense>({
+      query: ({ id, ...rest }) => ({
+        url: `/expenses/${id}`,
         method: 'PUT',
-        body: params,
+        body: rest,
       }),
       invalidatesTags: [ExpenseTag],
     }),
@@ -128,8 +132,12 @@ export const commonApi = createApi({
 export const {
   useSignUpMutation,
   useSignInMutation,
+
   useGetUserMeDataQuery,
+
   useGetExpensesQuery,
+  useGetExpenseQuery,
+
   useCreateExpenseMutation,
   useUpdateExpenseMutation,
 } = commonApi;

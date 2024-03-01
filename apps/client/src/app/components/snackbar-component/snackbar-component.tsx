@@ -5,6 +5,7 @@ import MuiAlert, { AlertProps } from '@mui/material/Alert';
 
 import { hideSnackbar, selectSnackbar } from '../../store/slices';
 import { useAppDispatch } from '../../store/hooks';
+import { autoHideDuration } from '../../constants';
 
 const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -28,7 +29,7 @@ export const SnackbarComponent: FC = () => {
   return (
     <Snackbar
       open={open}
-      autoHideDuration={6000}
+      autoHideDuration={autoHideDuration}
       onClose={handleClose}
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
     >

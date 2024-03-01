@@ -38,6 +38,17 @@ export class ExpenseController {
     return await this.expenseService.getExpenses(params, request);
   }
 
+  @Get(':id')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @ApiOkResponse({
+    description: 'Get Expense by id response model',
+    type: ExpenseDto,
+  })
+  async getExpenseById(@Param('id') id: string, @Req() request: Request) {
+    return await this.expenseService.getExpenseById(id, request);
+  }
+
   @Post()
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
