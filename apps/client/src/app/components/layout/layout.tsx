@@ -12,6 +12,7 @@ import { useUserMe } from '../../store/hooks';
 import { SnackbarComponent } from '../snackbar-component/snackbar-component';
 import { CreateExpense } from '../../pages/create-expense';
 import { Expense } from '../../pages/expense';
+import { ProtectedRoute } from '../protected-route/protected-route';
 
 export const Layout: FC = () => {
   useUserMe();
@@ -26,8 +27,11 @@ export const Layout: FC = () => {
         <Route path={ROUTES.HOME} element={<Home />} />
         <Route path={ROUTES.SIGN_UP} element={<SignUp />} />
         <Route path={ROUTES.SIGN_IN} element={<SignIn />} />
-        <Route path={ROUTES.CREATE_EXPENSE} element={<CreateExpense />} />
-        <Route path={ROUTES.EXPENSE} element={<Expense />} />
+
+        <Route element={<ProtectedRoute />}>
+          <Route path={ROUTES.CREATE_EXPENSE} element={<CreateExpense />} />
+          <Route path={ROUTES.EXPENSE} element={<Expense />} />
+        </Route>
       </Routes>
 
       <SnackbarComponent />
