@@ -1,12 +1,15 @@
-import { createSelector, createSlice, Reducer } from '@reduxjs/toolkit';
+import { createSlice, Reducer } from '@reduxjs/toolkit';
 
 import { AppState } from '../store';
 
 type SystemState = {
   authToken?: string;
+  logInState: 'init' | 'done';
 };
 
-const initialState: SystemState = {};
+const initialState: SystemState = {
+  logInState: 'init',
+};
 
 const systemSlice = createSlice({
   name: 'system',
@@ -18,14 +21,15 @@ const systemSlice = createSlice({
     resetAuthToken: (state) => {
       state.authToken = undefined;
     },
+    setLogInState: (state, action) => {
+      state.logInState = action.payload;
+    },
   },
 });
 
-export const { setAuthToken, resetAuthToken } = systemSlice.actions;
+export const { setAuthToken, resetAuthToken, setLogInState } =
+  systemSlice.actions;
 
-export const selectSystem = createSelector(
-  (state: AppState) => state.system,
-  (system) => system
-);
+export const selectSystem = (state: AppState) => state.system;
 
 export const systemReducer: Reducer<SystemState> = systemSlice.reducer;

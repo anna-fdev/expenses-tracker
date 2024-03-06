@@ -85,10 +85,11 @@ export const ExpenseForm: FC<ExpenseFormProps> = ({ existedExpense }) => {
   return (
     <Box
       sx={{
-        mt: 4,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        maxWidth: 'sm',
+        margin: '2rem auto 0rem auto',
       }}
     >
       <Box component="form" onSubmit={formik.handleSubmit}>

@@ -1,16 +1,15 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { ApiEntryList } from '@expenses-tracker/api-models';
 
 import { PrismaService } from '../prisma/prisma.servise';
-import { getHeaderAuthToken, getStartOfMonthISO, transform } from '../utils';
+import {
+  getHeaderAuthToken,
+  getStartOfMonthISO,
+  handlePrismaError,
+  transform,
+} from '../utils';
 import { LIMIT, OFFSET } from '../constants';
 
 import { ExpenseQueryParamsDto } from './dto/expense-query-params.dto';
@@ -84,15 +83,7 @@ export class ExpenseService {
           id,
         },
       })
-      .catch((error) => {
-        if (error instanceof PrismaClientKnownRequestError) {
-          if (error.code === 'P2025' || error.code === 'P2016') {
-            throw new NotFoundException(`Can't find a record with id ${id}`);
-          }
-        }
-
-        throw error;
-      });
+      .catch((error) => handlePrismaError(error, id));
 
     return transform(ExpenseDto, expense);
   }
@@ -124,15 +115,7 @@ export class ExpenseService {
           user_id,
         },
       })
-      .catch((error) => {
-        if (error instanceof PrismaClientKnownRequestError) {
-          if (error.code === 'P2025' || error.code === 'P2016') {
-            throw new NotFoundException(`Can't find a record with id ${id}`);
-          }
-        }
-
-        throw error;
-      });
+      .catch((error) => handlePrismaError(error, id));
 
     return transform(ExpenseDto, updatedExpense);
   }
@@ -146,15 +129,7 @@ export class ExpenseService {
       .delete({
         where: { id, user_id },
       })
-      .catch((error) => {
-        if (error instanceof PrismaClientKnownRequestError) {
-          if (error.code === 'P2025' || error.code === 'P2016') {
-            throw new NotFoundException(`Can't find a record with id ${id}`);
-          }
-        }
-
-        throw error;
-      });
+      .catch((error) => handlePrismaError(error, id));
 
     return transform(ExpenseDto, deletedExpense);
   }

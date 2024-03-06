@@ -15,7 +15,7 @@ import {
   ApiUser,
 } from '@expenses-tracker/api-models';
 
-import { resetAuthToken, setAuthToken } from '../slices';
+import { resetAuthToken, setAuthToken, setLogInState } from '../slices';
 import { AppState } from '../store';
 import { AUTH_TOKEN } from '../../constants';
 
@@ -78,6 +78,7 @@ export const commonApi = createApi({
         }
       },
     }),
+
     signIn: builder.mutation<ApiSignInResponse, ApiAuthParams>({
       query: (params) => ({
         url: '/auth/sign-in',
@@ -99,17 +100,32 @@ export const commonApi = createApi({
         }
       },
     }),
+
     getUserMeData: builder.query<ApiUser, void>({
       query: () => '/user/me',
+      onQueryStarted: async (arg, { queryFulfilled, dispatch }) => {
+        try {
+          const { data } = await queryFulfilled;
+
+          if (data) {
+            dispatch(setLogInState('done'));
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      },
     }),
+
     getExpenses: builder.query<ApiEntryList<ApiExpense>, void>({
       query: () => '/expenses',
       providesTags: [ExpenseTag],
     }),
+
     getExpense: builder.query<ApiExpense, string>({
       query: (id) => `/expenses/${id}`,
       providesTags: [ExpenseTag],
     }),
+
     createExpense: builder.mutation<ApiExpense, ApiExpenseParams>({
       query: (params) => ({
         url: '/expenses',
@@ -118,6 +134,7 @@ export const commonApi = createApi({
       }),
       invalidatesTags: [ExpenseTag],
     }),
+
     updateExpense: builder.mutation<ApiExpense, ApiExpense>({
       query: ({ id, ...rest }) => ({
         url: `/expenses/${id}`,

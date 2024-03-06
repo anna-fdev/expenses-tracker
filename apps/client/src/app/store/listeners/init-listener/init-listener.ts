@@ -1,7 +1,7 @@
 import { AUTH_TOKEN } from '../../../constants';
 import { initAppAction } from '../../actions';
 import { listenerMiddleware } from '../listener-middleware';
-import { setAuthToken } from '../../slices';
+import { setAuthToken, setLogInState } from '../../slices';
 
 listenerMiddleware.startListening({
   actionCreator: initAppAction,
@@ -10,6 +10,8 @@ listenerMiddleware.startListening({
 
     if (token) {
       listenerApi.dispatch(setAuthToken(token));
+    } else {
+      listenerApi.dispatch(setLogInState('done'));
     }
   },
 });
