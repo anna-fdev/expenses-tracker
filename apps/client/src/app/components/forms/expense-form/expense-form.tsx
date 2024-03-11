@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FC } from 'react';
-import { Box, Button, Grid, TextField } from '@mui/material';
+import { Box, Grid, TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -9,6 +9,7 @@ import { ApiExpense } from '@expenses-tracker/api-models';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { LoadingButton } from '@mui/lab';
 
 import { ROUTES } from '../../../constants';
 import {
@@ -89,7 +90,9 @@ export const ExpenseForm: FC<ExpenseFormProps> = ({ existedExpense }) => {
         flexDirection: 'column',
         alignItems: 'center',
         maxWidth: 'sm',
-        margin: '2rem auto 0rem auto',
+        marginTop: 4,
+        marginRight: 'auto',
+        marginLeft: 'auto',
       }}
     >
       <Box component="form" onSubmit={formik.handleSubmit}>
@@ -148,15 +151,17 @@ export const ExpenseForm: FC<ExpenseFormProps> = ({ existedExpense }) => {
             </LocalizationProvider>
           </Grid>
         </Grid>
-        <Button
+        <LoadingButton
           type="submit"
           variant="contained"
           color="secondary"
           sx={{ mt: 3, mb: 2 }}
           fullWidth
+          loading={formik.isSubmitting}
+          disabled={!formik.dirty}
         >
           {existedExpense ? 'Update' : 'Create'} Expense
-        </Button>
+        </LoadingButton>
       </Box>
     </Box>
   );

@@ -3,7 +3,7 @@ import process from 'process';
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
-import { getSalt } from '../../utils/get-salt';
+import { getSalt } from '../../utils';
 
 import { generateExpense } from './generate-expense';
 

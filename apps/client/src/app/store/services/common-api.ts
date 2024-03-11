@@ -143,6 +143,14 @@ export const commonApi = createApi({
       }),
       invalidatesTags: [ExpenseTag],
     }),
+
+    deleteExpense: builder.mutation<ApiExpense, string>({
+      query: (id) => ({
+        url: `/expenses/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: [ExpenseTag],
+    }),
   }),
 });
 
@@ -157,4 +165,5 @@ export const {
 
   useCreateExpenseMutation,
   useUpdateExpenseMutation,
+  useDeleteExpenseMutation,
 } = commonApi;

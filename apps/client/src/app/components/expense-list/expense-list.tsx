@@ -14,15 +14,19 @@ import {
   Typography,
 } from '@mui/material';
 import { generatePath, useNavigate } from 'react-router-dom';
+import { DeleteOutlined, EditOutlined } from '@mui/icons-material';
+import { useModal } from 'mui-modal-provider';
 
-import { useExpenses } from '../../store/hooks';
+import { useAppDispatch, useExpenses } from '../../store/hooks';
 import { ROUTES } from '../../constants';
+import { DeleteExpenseDialog } from '../modals/delete-expense-dialog';
+import { useDeleteExpenseMutation } from '../../store/services';
+import { showSnackbar } from '../../store/slices';
 
 import { ExpenseControls } from './expense-controls';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.grey.A200,
     fontSize: '1rem',
     fontWeight: 'bold',
   },
@@ -31,11 +35,35 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 export const ExpenseList: FC = () => {
   const { data } = useExpenses();
   const navigate = useNavigate();
+  const { showModal } = useModal();
+  const [deleteExpense] = useDeleteExpenseMutation();
+  const dispatch = useAppDispatch();
 
-  const handleClick = (id: string) => {
+  const handleEditClick = (id: string) => {
     const path = generatePath(ROUTES.EXPENSE, { id });
 
     navigate(path);
+  };
+
+  const handleDeleteClick = async (id: string) => {
+    const modal = showModal(DeleteExpenseDialog, {
+      content: 'Are you sure you want to delete the expense',
+      onConfirm: async () => {
+        await deleteExpense(id);
+
+        modal.hide();
+
+        dispatch(
+          showSnackbar({
+            message: 'Expense was successfully deleted!',
+            severity: 'success',
+          })
+        );
+      },
+      onCancel: () => {
+        modal.hide();
+      },
+    });
   };
 
   return (
@@ -56,24 +84,40 @@ export const ExpenseList: FC = () => {
           <Card elevation={2} sx={{ mt: 4, width: '100%' }}>
             <TableContainer>
               <Table stickyHeader aria-label="sticky table">
-                <TableHead>
+                <TableHead
+                  sx={{
+                    '& th': {
+                      backgroundColor: (theme) => theme.palette.grey.A200,
+                    },
+                  }}
+                >
                   <TableRow>
                     <StyledTableCell align="left">Amount</StyledTableCell>
                     <StyledTableCell align="left">Name</StyledTableCell>
                     <StyledTableCell align="left">Category</StyledTableCell>
+                    <StyledTableCell align="right">Edit/Delete</StyledTableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {data.entries.map((entry) => (
-                    <TableRow
-                      hover
-                      key={entry.id}
-                      onClick={() => handleClick(entry.id)}
-                      sx={{ cursor: 'pointer' }}
-                    >
+                    <TableRow hover key={entry.id}>
                       <TableCell align="left">{entry.amount}</TableCell>
                       <TableCell align="left">{entry.name}</TableCell>
                       <TableCell align="left">{entry.category}</TableCell>
+                      <TableCell align="right">
+                        <EditOutlined
+                          onClick={() => handleEditClick(entry.id)}
+                          color="secondary"
+                          fontSize="medium"
+                          sx={{ cursor: 'pointer' }}
+                        />
+                        <DeleteOutlined
+                          onClick={() => handleDeleteClick(entry.id)}
+                          color="secondary"
+                          fontSize="medium"
+                          sx={{ cursor: 'pointer' }}
+                        />
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
