@@ -13,7 +13,11 @@ export const Expense: FC = () => {
 
   return (
     <ContentContainer>
-      <Typography component="h1" variant="h5" textAlign="center" mt={4}>
+      <Typography
+        component="h1"
+        variant="h5"
+        sx={{ textAlign: 'center', mt: 4 }}
+      >
         Edit Expense
       </Typography>
       <ExpenseForm existedExpense={data} />

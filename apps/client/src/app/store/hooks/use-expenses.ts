@@ -1,7 +1,23 @@
 import { useGetExpenseQuery, useGetExpensesQuery } from '../services';
 
-export const useExpenses = () => {
-  const { data, error, isLoading } = useGetExpensesQuery(undefined, {
+export const useExpenses = (selectedDate: Date) => {
+  const start_date = new Date(
+    selectedDate.getFullYear(),
+    selectedDate.getMonth(),
+    1
+  ).toISOString();
+  const end_date = new Date(
+    selectedDate.getFullYear(),
+    selectedDate.getMonth() + 1,
+    0
+  ).toISOString();
+
+  const dateParams = {
+    start_date,
+    end_date,
+  };
+
+  const { data, error, isLoading } = useGetExpensesQuery(dateParams, {
     selectFromResult: ({ data, error, isLoading }) => ({
       data,
       error,

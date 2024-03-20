@@ -4,10 +4,12 @@ import { FC } from 'react';
 import { SignInForm } from '../components/forms';
 import { ContentContainer } from '../components';
 
-export const SignIn: FC = () => {
+const SignIn: FC = () => {
   return (
     <ContentContainer>
       <SignInForm />
     </ContentContainer>
   );
 };
+
+export default SignIn;

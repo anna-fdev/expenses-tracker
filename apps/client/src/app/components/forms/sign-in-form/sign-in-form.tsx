@@ -116,7 +116,7 @@ export const SignInForm: FC = () => {
         >
           Sign In
         </Button>
-        <Grid container justifyContent="flex-end">
+        <Grid container sx={{ justifyContent: 'flex-end' }}>
           <Grid item>
             <Link to={ROUTES.SIGN_UP}>Do not have an account? Sign up</Link>
           </Grid>
