@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -32,10 +33,10 @@ export class ExpenseController {
     type: ExpenseResponse,
   })
   async getExpenses(
-    @Body() params: ExpenseQueryParamsDto,
-    @Req() request: Request
+    @Req() request: Request,
+    @Query() query: ExpenseQueryParamsDto
   ) {
-    return await this.expenseService.getExpenses(params, request);
+    return await this.expenseService.getExpenses(query, request);
   }
 
   @Get(':id')

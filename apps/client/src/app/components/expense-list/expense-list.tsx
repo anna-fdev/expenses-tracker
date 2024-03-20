@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import {
   Box,
   Card,
+  IconButton,
   styled,
   Table,
   TableBody,
@@ -14,7 +15,12 @@ import {
   Typography,
 } from '@mui/material';
 import { generatePath, useNavigate } from 'react-router-dom';
-import { DeleteOutlined, EditOutlined } from '@mui/icons-material';
+import {
+  ArrowBack,
+  ArrowForward,
+  DeleteOutlined,
+  EditOutlined,
+} from '@mui/icons-material';
 import { useModal } from 'mui-modal-provider';
 
 import { useAppDispatch, useExpenses } from '../../store/hooks';
@@ -33,11 +39,22 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 export const ExpenseList: FC = () => {
-  const { data } = useExpenses();
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+
+  const { data } = useExpenses(selectedDate);
   const navigate = useNavigate();
   const { showModal } = useModal();
   const [deleteExpense] = useDeleteExpenseMutation();
   const dispatch = useAppDispatch();
+
+  const handleMonthNavigate =
+    (navigateDirection: 'decrement' | 'increment') => () => {
+      const monthValue = navigateDirection === 'increment' ? 1 : -1;
+
+      setSelectedDate(
+        new Date(selectedDate.setMonth(selectedDate.getMonth() + monthValue))
+      );
+    };
 
   const handleEditClick = (id: string) => {
     const path = generatePath(ROUTES.EXPENSE, { id });
@@ -66,6 +83,12 @@ export const ExpenseList: FC = () => {
     });
   };
 
+  const disableForwardMonthButton = (): boolean => {
+    return (
+      new Date().toLocaleDateString() === selectedDate.toLocaleDateString()
+    );
+  };
+
   return (
     <Box
       sx={{
@@ -78,9 +101,42 @@ export const ExpenseList: FC = () => {
     >
       {data ? (
         <>
-          <Typography component="h1" variant="h5" textAlign="center" mt={4}>
-            Expenses
-          </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              mt: 4,
+              width: '100%',
+            }}
+          >
+            <IconButton
+              color="secondary"
+              aria-label="navigate back month"
+              onClick={handleMonthNavigate('decrement')}
+            >
+              <ArrowBack />
+            </IconButton>
+            <Typography
+              component="h1"
+              sx={{ fontSize: '1.5rem', textAlign: 'center' }}
+            >
+              {new Date(selectedDate).toLocaleString('default', {
+                month: 'long',
+                year: 'numeric',
+              })}
+            </Typography>
+            <IconButton
+              color="secondary"
+              aria-label="navigate forward month"
+              onClick={handleMonthNavigate('increment')}
+              disabled={disableForwardMonthButton()}
+            >
+              <ArrowForward />
+            </IconButton>
+          </Box>
+
           <Card elevation={2} sx={{ mt: 4, width: '100%' }}>
             <TableContainer>
               <Table stickyHeader aria-label="sticky table">

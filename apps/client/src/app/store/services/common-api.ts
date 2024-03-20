@@ -10,6 +10,7 @@ import {
   ApiEntryList,
   ApiExpense,
   ApiExpenseParams,
+  ApiExpensesListParams,
   ApiSignInResponse,
   ApiSignUpResponse,
   ApiUser,
@@ -116,10 +117,16 @@ export const commonApi = createApi({
       },
     }),
 
-    getExpenses: builder.query<ApiEntryList<ApiExpense>, void>({
-      query: () => '/expenses',
-      providesTags: [ExpenseTag],
-    }),
+    getExpenses: builder.query<ApiEntryList<ApiExpense>, ApiExpensesListParams>(
+      {
+        query: ({ start_date, end_date }) => {
+          const query = `?start_date=${start_date}&end_date=${end_date}`;
+
+          return `/expenses${query}`;
+        },
+        providesTags: [ExpenseTag],
+      }
+    ),
 
     getExpense: builder.query<ApiExpense, string>({
       query: (id) => `/expenses/${id}`,

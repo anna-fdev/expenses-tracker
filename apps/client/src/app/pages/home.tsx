@@ -12,8 +12,12 @@ export const Home = () => {
       {isLoggedIn ? (
         <ExpenseList />
       ) : (
-        <Typography component="h4" textAlign="center" mt={4}>
-          Home Page
+        <Typography
+          component="h1"
+          variant="h5"
+          sx={{ textAlign: 'center', mt: 4 }}
+        >
+          Welcome in Our Expenses App
         </Typography>
       )}
     </ContentContainer>
