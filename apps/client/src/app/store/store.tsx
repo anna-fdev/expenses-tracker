@@ -1,7 +1,7 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 
 import { commonApi } from './services';
-import { snackbarReducer, systemReducer } from './slices';
+import { snackbarReducer, systemReducer, UIExpensesReducer } from './slices';
 import { listenerMiddleware } from './listeners/listener-middleware';
 import './listeners';
 
@@ -10,9 +10,12 @@ export const store = configureStore({
     [commonApi.reducerPath]: commonApi.reducer,
     system: systemReducer,
     snackbar: snackbarReducer,
+    UIExpenses: UIExpensesReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware()
+    getDefaultMiddleware({
+      serializableCheck: false,
+    })
       .concat([commonApi.middleware])
       .prepend(listenerMiddleware.middleware),
   devTools: true,

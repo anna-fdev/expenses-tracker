@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { FC } from 'react';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 
-import { ExpenseForm } from '../components/forms/expense-form/expense-form';
+import { ArrowGoBack, ContentContainer, ExpenseForm } from '../components';
 import { useExpense } from '../store/hooks';
-import { ContentContainer } from '../components';
 
 export const Expense: FC = () => {
   const { id } = useParams();
@@ -13,13 +12,12 @@ export const Expense: FC = () => {
 
   return (
     <ContentContainer>
-      <Typography
-        component="h1"
-        variant="h5"
-        sx={{ textAlign: 'center', mt: 4 }}
-      >
-        Edit Expense
-      </Typography>
+      <Box sx={{ maxWidth: 'sm', mt: 4, mr: 'auto', ml: 'auto' }}>
+        <ArrowGoBack />
+        <Typography component="h1" variant="h5" sx={{ textAlign: 'center' }}>
+          Edit Expense
+        </Typography>
+      </Box>
       <ExpenseForm existedExpense={data} />
     </ContentContainer>
   );
