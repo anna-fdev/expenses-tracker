@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import {
   Box,
   Card,
@@ -23,11 +23,15 @@ import {
 } from '@mui/icons-material';
 import { useModal } from 'mui-modal-provider';
 
-import { useAppDispatch, useExpenses } from '../../store/hooks';
+import { useAppDispatch, useAppSelector, useExpenses } from '../../store/hooks';
 import { ROUTES } from '../../constants';
 import { DeleteExpenseDialog } from '../modals/delete-expense-dialog';
 import { useDeleteExpenseMutation } from '../../store/services';
-import { showSnackbar } from '../../store/slices';
+import {
+  selectSelectedDate,
+  setSelectedDate,
+  showSnackbar,
+} from '../../store/slices';
 
 import { ExpenseControls } from './expense-controls';
 
@@ -39,8 +43,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 export const ExpenseList: FC = () => {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-
+  const selectedDate = useAppSelector(selectSelectedDate);
   const { data } = useExpenses(selectedDate);
   const navigate = useNavigate();
   const { showModal } = useModal();
@@ -51,9 +54,11 @@ export const ExpenseList: FC = () => {
     (navigateDirection: 'decrement' | 'increment') => () => {
       const monthValue = navigateDirection === 'increment' ? 1 : -1;
 
-      setSelectedDate(
-        new Date(selectedDate.setMonth(selectedDate.getMonth() + monthValue))
+      const newDate = new Date(
+        selectedDate.setMonth(selectedDate.getMonth() + monthValue)
       );
+
+      dispatch(setSelectedDate({ newSelectedDate: newDate }));
     };
 
   const handleEditClick = (id: string) => {

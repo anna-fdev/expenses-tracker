@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const ArrowGoBack: FC = () => {
   const navigate = useNavigate();
+
   return (
     <IconButton
       color="secondary"
