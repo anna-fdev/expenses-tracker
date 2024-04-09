@@ -4,4 +4,5 @@ export const ROUTES = {
   SIGN_IN: '/sign-in',
   CREATE_EXPENSE: '/create-expense',
   EXPENSE: '/expense/:id',
+  CATEGORIES: 'categories',
 };
