@@ -27,7 +27,7 @@ export const ExpenseControls: FC = () => {
       </Button>
       <Button
         component={Link}
-        to="#"
+        to={ROUTES.CATEGORIES}
         variant="contained"
         color="secondary"
         startIcon={<CurrencyExchange />}

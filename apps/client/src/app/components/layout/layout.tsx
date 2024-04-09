@@ -11,7 +11,8 @@ import { SnackbarComponent } from '../snackbar-component/snackbar-component';
 import { CreateExpense } from '../../pages/create-expense';
 import { Expense } from '../../pages/expense';
 import { ProtectedRoute } from '../protected-route/protected-route';
-import { LoadingBox } from '../loading-box/loading-box';
+import { FormSkeleton } from '../skeletons/form-skeleton';
+import { ExpenseCategories } from '../../pages/expense-categories';
 
 const SignUp = lazy(() => import('../../pages/sign-up'));
 const SignIn = lazy(() => import('../../pages/sign-in'));
@@ -30,7 +31,7 @@ export const Layout: FC = () => {
         <Route
           path={ROUTES.SIGN_UP}
           element={
-            <Suspense fallback={<LoadingBox />}>
+            <Suspense fallback={<FormSkeleton />}>
               <SignUp />
             </Suspense>
           }
@@ -38,7 +39,7 @@ export const Layout: FC = () => {
         <Route
           path={ROUTES.SIGN_IN}
           element={
-            <Suspense fallback={<LoadingBox />}>
+            <Suspense fallback={<FormSkeleton />}>
               <SignIn />
             </Suspense>
           }
@@ -47,6 +48,7 @@ export const Layout: FC = () => {
         <Route element={<ProtectedRoute />}>
           <Route path={ROUTES.CREATE_EXPENSE} element={<CreateExpense />} />
           <Route path={ROUTES.EXPENSE} element={<Expense />} />
+          <Route path={ROUTES.CATEGORIES} element={<ExpenseCategories />} />
         </Route>
       </Routes>
 

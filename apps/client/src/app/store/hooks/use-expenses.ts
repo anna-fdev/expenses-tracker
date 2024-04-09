@@ -1,6 +1,11 @@
 import { useGetExpenseQuery, useGetExpensesQuery } from '../services';
+import { selectSelectedDate } from '../slices';
 
-export const useExpenses = (selectedDate: Date) => {
+import { useAppSelector } from './common';
+
+export const useExpenses = () => {
+  const selectedDate = useAppSelector(selectSelectedDate);
+
   const start_date = new Date(
     selectedDate.getFullYear(),
     selectedDate.getMonth(),
