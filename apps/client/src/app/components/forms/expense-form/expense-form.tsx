@@ -1,6 +1,14 @@
 import * as React from 'react';
 import { FC } from 'react';
-import { Box, Grid, TextField } from '@mui/material';
+import {
+  Box,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -16,6 +24,7 @@ import {
   useCreateExpenseMutation,
   useUpdateExpenseMutation,
 } from '../../../store/services';
+import { categoryListMap } from '../../../utils/ui-helpers/category-list-map';
 
 const ExpenseFormSchema = Yup.object().shape({
   amount: Yup.number().positive().required(),
@@ -122,16 +131,38 @@ export const ExpenseForm: FC<ExpenseFormProps> = ({ existedExpense }) => {
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField
-              label="Category"
-              name="category"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.category}
-              error={formik.touched.category && Boolean(formik.errors.category)}
-              helperText={formik.touched.category && formik.errors.category}
-              fullWidth
-            />
+            <FormControl variant="outlined" fullWidth>
+              <InputLabel htmlFor="category">Category</InputLabel>
+              <Select
+                id="category"
+                label="Category"
+                name="category"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.category}
+                error={
+                  formik.touched.category && Boolean(formik.errors.category)
+                }
+                fullWidth
+                sx={{
+                  '.MuiSelect-select': {
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1,
+                  },
+                }}
+              >
+                {categoryListMap.map((category) => (
+                  <MenuItem
+                    key={category.item}
+                    value={category.item}
+                    sx={{ gap: 1 }}
+                  >
+                    {category.icon} {category.item}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={12}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>

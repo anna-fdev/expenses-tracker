@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@expenses-tracker/api-models": ["libs/api-models/src/index.ts"]
+      "@expenses-tracker/api-models": ["libs/api-models/src/index.ts"],
+      "@expenses-tracker/models": ["libs/models/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

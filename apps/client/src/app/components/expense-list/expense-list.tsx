@@ -24,6 +24,7 @@ import {
 import { useAppSelector, useExpenses } from '../../store/hooks';
 import { selectSelectedDate } from '../../store/slices';
 import { ExpensesSkeleton } from '../skeletons/expenses-skeleton';
+import { Pie } from '../pie/pie';
 
 import { ExpenseControls } from './expense-controls';
 import { useExpenseList } from './use-expense-list';
@@ -95,49 +96,52 @@ export const ExpenseList: FC = () => {
       {isLoading && <ExpensesSkeleton />}
 
       {data && (
-        <Card elevation={2} sx={{ mt: 4, width: '100%' }}>
-          <TableContainer>
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead
-                sx={{
-                  '& th': {
-                    backgroundColor: (theme) => theme.palette.grey.A200,
-                  },
-                }}
-              >
-                <TableRow>
-                  <StyledTableCell align="left">Amount</StyledTableCell>
-                  <StyledTableCell align="left">Name</StyledTableCell>
-                  <StyledTableCell align="left">Category</StyledTableCell>
-                  <StyledTableCell align="right">Edit/Delete</StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {data.entries.map((entry) => (
-                  <TableRow hover key={entry.id}>
-                    <TableCell align="left">{entry.amount}</TableCell>
-                    <TableCell align="left">{entry.name}</TableCell>
-                    <TableCell align="left">{entry.category}</TableCell>
-                    <TableCell align="right">
-                      <EditOutlined
-                        onClick={() => handleEditClick(entry.id)}
-                        color="secondary"
-                        fontSize="medium"
-                        sx={{ cursor: 'pointer' }}
-                      />
-                      <DeleteOutlined
-                        onClick={() => handleDeleteClick(entry.id)}
-                        color="secondary"
-                        fontSize="medium"
-                        sx={{ cursor: 'pointer' }}
-                      />
-                    </TableCell>
+        <>
+          <Pie />
+          <Card elevation={2} sx={{ mt: 4, width: '100%' }}>
+            <TableContainer>
+              <Table stickyHeader aria-label="sticky table">
+                <TableHead
+                  sx={{
+                    '& th': {
+                      backgroundColor: (theme) => theme.palette.grey.A200,
+                    },
+                  }}
+                >
+                  <TableRow>
+                    <StyledTableCell align="left">Amount</StyledTableCell>
+                    <StyledTableCell align="left">Name</StyledTableCell>
+                    <StyledTableCell align="left">Category</StyledTableCell>
+                    <StyledTableCell align="right">Edit/Delete</StyledTableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Card>
+                </TableHead>
+                <TableBody>
+                  {data.entries.map((entry) => (
+                    <TableRow hover key={entry.id}>
+                      <TableCell align="left">{entry.amount}</TableCell>
+                      <TableCell align="left">{entry.name}</TableCell>
+                      <TableCell align="left">{entry.category}</TableCell>
+                      <TableCell align="right">
+                        <EditOutlined
+                          onClick={() => handleEditClick(entry.id)}
+                          color="secondary"
+                          fontSize="medium"
+                          sx={{ cursor: 'pointer' }}
+                        />
+                        <DeleteOutlined
+                          onClick={() => handleDeleteClick(entry.id)}
+                          color="secondary"
+                          fontSize="medium"
+                          sx={{ cursor: 'pointer' }}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Card>
+        </>
       )}
 
       <ExpenseControls />
