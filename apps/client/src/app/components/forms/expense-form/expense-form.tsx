@@ -154,7 +154,7 @@ export const ExpenseForm: FC<ExpenseFormProps> = ({ existedExpense }) => {
               >
                 {categoryListMap.map((category) => (
                   <MenuItem
-                    key={crypto.randomUUID()}
+                    key={category.item}
                     value={category.item}
                     sx={{ gap: 1 }}
                   >

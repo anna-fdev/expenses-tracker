@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren } from 'react';
+import React, { FC, PropsWithChildren, useCallback } from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { useDrawingArea } from '@mui/x-charts';
 import { styled } from '@mui/material/styles';
@@ -22,6 +22,7 @@ const StyledText = styled('text')(({ theme }) => ({
 
 const PieCenterLabel: FC<PropsWithChildren> = ({ children }) => {
   const { width, height, left, top } = useDrawingArea();
+
   return (
     <StyledText x={left + width / 2} y={top + height / 2}>
       {children}
@@ -33,7 +34,7 @@ export const Pie: FC = () => {
   const { data } = useExpenses();
   const { entries = [] } = data || {};
 
-  const getPieChartData = () => {
+  const getPieChartData = useCallback(() => {
     const uniqueCategories = [
       ...new Set(data?.entries.map((expense) => expense.category)),
     ];
@@ -53,7 +54,7 @@ export const Pie: FC = () => {
         value: totalByCategory,
       };
     });
-  };
+  }, [entries]);
 
   const totalAmount = data?.entries
     .reduce((accumulator, currentAmount) => {
