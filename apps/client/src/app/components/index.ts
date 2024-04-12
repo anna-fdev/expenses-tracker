@@ -7,4 +7,5 @@ export * from './arrow-go-back/arrow-go-back';
 export * from './forms/expense-form/expense-form';
 export * from './skeletons/form-skeleton';
 export * from './skeletons/expenses-skeleton';
-export * from './categories/categories';
+export * from './category-list/category-list';
+export * from './pie/pie';

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { FC } from 'react';
 import { Box, Typography } from '@mui/material';
 
-import { ArrowGoBack, Categories, ContentContainer } from '../components';
+import { ArrowGoBack, CategoryList, ContentContainer } from '../components';
 
 export const ExpenseCategories: FC = () => {
   return (
@@ -12,7 +12,7 @@ export const ExpenseCategories: FC = () => {
         <Typography component="h1" variant="h5" sx={{ textAlign: 'center' }}>
           Expenses By Category
         </Typography>
-        <Categories />
+        <CategoryList />
       </Box>
     </ContentContainer>
   );
