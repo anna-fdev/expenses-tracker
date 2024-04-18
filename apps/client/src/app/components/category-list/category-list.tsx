@@ -1,35 +1,60 @@
 import React, { FC } from 'react';
-import Grid from '@mui/material/Grid';
-import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Box, Grid, List } from '@mui/material';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import { categoryListMap } from '../../utils/ui-helpers/category-list-map';
+import {
+  categoryListMap,
+  useExpensesCategorisedData,
+} from '../../utils/ui-helpers';
 
 export const CategoryList: FC = () => {
+  const { uniqueCategoriesMap } = useExpensesCategorisedData();
+
+  const getCategoryIcon = (label: string) => {
+    const categoryMappedItem = categoryListMap.find(
+      (listItem) => listItem.item === label
+    );
+
+    return categoryMappedItem?.icon;
+  };
+
   return (
-    <Grid container spacing={4} mt={2}>
-      {categoryListMap.map((category, index) => (
-        <Grid item xs={6} md={4} key={index}>
-          <ListItemButton
-            sx={{
-              py: 3,
-              minHeight: 32,
-              boxShadow: 5,
-              borderRadius: 2,
-            }}
+    <Box mt={4}>
+      {uniqueCategoriesMap.map((category) => (
+        <Accordion key={category.id}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls={category.label}
+            id={category.label}
           >
-            <ListItemIcon sx={{ color: 'inherit' }}>
-              {category.icon}
-            </ListItemIcon>
-            <ListItemText
-              primary={category.item}
-              primaryTypographyProps={{
-                fontSize: 14,
-                fontWeight: 'medium',
-              }}
-            />
-          </ListItemButton>
-        </Grid>
+            <Grid container>
+              <Grid xs={6} display="flex" gap={1}>
+                {getCategoryIcon(category.label)}
+                {category.label}
+              </Grid>
+              <Grid xs={5} textAlign="right">
+                {category.value}
+              </Grid>
+            </Grid>
+          </AccordionSummary>
+          <AccordionDetails>
+            <List>
+              {category.expenses.map((expense) => (
+                <Grid container key={expense.id}>
+                  <Grid xs={2}>{expense.amount}</Grid>
+                  <Grid xs={6}>{expense.name}</Grid>
+                  <Grid xs={4} textAlign="right">
+                    {new Date(expense.expense_date).toDateString()}
+                  </Grid>
+                </Grid>
+              ))}
+            </List>
+          </AccordionDetails>
+        </Accordion>
       ))}
-    </Grid>
+    </Box>
   );
 };
