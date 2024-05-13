@@ -1,10 +1,10 @@
-import React, { FC, PropsWithChildren, useCallback } from 'react';
+import React, { FC, PropsWithChildren } from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { useDrawingArea } from '@mui/x-charts';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 
-import { useExpenses } from '../../store/hooks';
+import { useExpensesCategorisedData } from '../../utils/ui-helpers';
 
 export const pieParams = {
   width: 600,
@@ -31,36 +31,7 @@ const PieCenterLabel: FC<PropsWithChildren> = ({ children }) => {
 };
 
 export const Pie: FC = () => {
-  const { data } = useExpenses();
-  const { entries = [] } = data || {};
-
-  const getPieChartData = useCallback(() => {
-    const uniqueCategories = [
-      ...new Set(data?.entries.map((expense) => expense.category)),
-    ];
-
-    return uniqueCategories.map((category, idx) => {
-      const expensesByCategory = entries.filter(
-        (expense) => expense.category === category
-      );
-
-      const totalByCategory = expensesByCategory.reduce((total, expense) => {
-        return total + expense.amount;
-      }, 0);
-
-      return {
-        id: idx,
-        label: category,
-        value: totalByCategory,
-      };
-    });
-  }, [entries]);
-
-  const totalAmount = data?.entries
-    .reduce((accumulator, currentAmount) => {
-      return accumulator + currentAmount.amount;
-    }, 0)
-    .toFixed(2);
+  const { uniqueCategoriesMap, totalAmount } = useExpensesCategorisedData();
 
   return (
     <Box
@@ -75,7 +46,7 @@ export const Pie: FC = () => {
       <PieChart
         series={[
           {
-            data: getPieChartData(),
+            data: uniqueCategoriesMap,
             innerRadius: 55,
             outerRadius: 100,
             paddingAngle: 5,

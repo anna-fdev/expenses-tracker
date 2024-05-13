@@ -4,6 +4,7 @@ import {
   Box,
   Card,
   IconButton,
+  Skeleton,
   styled,
   Table,
   TableBody,
@@ -23,8 +24,8 @@ import {
 
 import { useAppSelector, useExpenses } from '../../store/hooks';
 import { selectSelectedDate } from '../../store/slices';
-import { ExpensesSkeleton } from '../skeletons/expenses-skeleton';
 import { Pie } from '../pie/pie';
+import { ExpensesSkeleton } from '../skeletons/expenses-skeleton';
 
 import { ExpenseControls } from './expense-controls';
 import { useExpenseList } from './use-expense-list';
@@ -46,6 +47,8 @@ export const ExpenseList: FC = () => {
     handleEditClick,
     disableForwardMonthButton,
   } = useExpenseList();
+
+  const isLoadingAndNoData = isLoading && !data;
 
   return (
     <Box
@@ -93,9 +96,23 @@ export const ExpenseList: FC = () => {
         </IconButton>
       </Box>
 
-      {isLoading && <ExpensesSkeleton />}
+      {isLoadingAndNoData && (
+        <>
+          <Skeleton
+            variant="circular"
+            width={240}
+            height={240}
+            sx={{ mt: 4 }}
+          />
+          <ExpensesSkeleton />
+        </>
+      )}
 
-      {data && (
+      {data?.entries.length === 0 ? (
+        <Typography sx={{ mt: 4 }}>
+          There are no expenses yet. Add new expense
+        </Typography>
+      ) : (
         <>
           <Pie />
           <Card elevation={2} sx={{ mt: 4, width: '100%' }}>
@@ -116,7 +133,7 @@ export const ExpenseList: FC = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {data.entries.map((entry) => (
+                  {data?.entries.map((entry) => (
                     <TableRow hover key={entry.id}>
                       <TableCell align="left">{entry.amount}</TableCell>
                       <TableCell align="left">{entry.name}</TableCell>

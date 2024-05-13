@@ -18,13 +18,14 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LoadingButton } from '@mui/lab';
+import { CategoryEnum } from '@expenses-tracker/models';
 
 import { ROUTES } from '../../../constants';
 import {
   useCreateExpenseMutation,
   useUpdateExpenseMutation,
 } from '../../../store/services';
-import { categoryListMap } from '../../../utils/ui-helpers/category-list-map';
+import { categoryListMap } from '../../../utils/ui-helpers';
 
 const ExpenseFormSchema = Yup.object().shape({
   amount: Yup.number().positive().required(),
@@ -152,13 +153,10 @@ export const ExpenseForm: FC<ExpenseFormProps> = ({ existedExpense }) => {
                   },
                 }}
               >
-                {categoryListMap.map((category) => (
-                  <MenuItem
-                    key={category.item}
-                    value={category.item}
-                    sx={{ gap: 1 }}
-                  >
-                    {category.icon} {category.item}
+                {Object.keys(categoryListMap).map((key) => (
+                  <MenuItem key={key} value={key} sx={{ gap: 1 }}>
+                    {categoryListMap[key as CategoryEnum].icon}
+                    {key}
                   </MenuItem>
                 ))}
               </Select>

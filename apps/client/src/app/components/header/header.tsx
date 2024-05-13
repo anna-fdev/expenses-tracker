@@ -35,7 +35,8 @@ export const Header: FC = () => {
               display: 'flex',
               alignItems: 'center',
               textDecoration: 'none',
-              color: 'secondary.main',
+              color: 'info.main',
+              filter: 'drop-shadow(1px 2px 3px rgb(0 0 0 / 0.3))',
             }}
           >
             <AccountBalanceWalletIcon sx={{ display: 'flex', mr: 1 }} />

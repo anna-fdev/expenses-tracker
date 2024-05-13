@@ -1,35 +1,46 @@
 import React, { FC } from 'react';
-import Grid from '@mui/material/Grid';
-import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Box, Card, Grid, List, ListItem } from '@mui/material';
 
-import { categoryListMap } from '../../utils/ui-helpers/category-list-map';
+import { useExpensesCategorisedData } from '../../utils/ui-helpers';
+import { COLOR_HELPER_1 } from '../../constants';
+
+import { CategoryItem } from './category-item';
 
 export const CategoryList: FC = () => {
+  const { uniqueCategoriesMap, totalAmount } = useExpensesCategorisedData();
+
   return (
-    <Grid container spacing={4} mt={2}>
-      {categoryListMap.map((category, index) => (
-        <Grid item xs={6} md={4} key={index}>
-          <ListItemButton
-            sx={{
-              py: 3,
-              minHeight: 32,
-              boxShadow: 5,
-              borderRadius: 2,
-            }}
-          >
-            <ListItemIcon sx={{ color: 'inherit' }}>
-              {category.icon}
-            </ListItemIcon>
-            <ListItemText
-              primary={category.item}
-              primaryTypographyProps={{
-                fontSize: 14,
-                fontWeight: 'medium',
-              }}
-            />
-          </ListItemButton>
-        </Grid>
+    <Box mt={4}>
+      {uniqueCategoriesMap.map((categorisedExpenses) => (
+        <CategoryItem
+          key={categorisedExpenses.id}
+          categorisedExpenses={categorisedExpenses}
+        />
       ))}
-    </Grid>
+      <Card>
+        <List
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            width: '90%',
+            marginRight: 'auto',
+            marginLeft: 'auto',
+            color: COLOR_HELPER_1,
+            fontWeight: 'bold',
+          }}
+        >
+          <ListItem>
+            <Grid container spacing={2}>
+              <Grid item xs={9}>
+                Total
+              </Grid>
+              <Grid item xs={3} sx={{ textAlign: 'center' }}>
+                {totalAmount}
+              </Grid>
+            </Grid>
+          </ListItem>
+        </List>
+      </Card>
+    </Box>
   );
 };
