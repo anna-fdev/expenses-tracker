@@ -11,13 +11,48 @@ import {
 } from '@mui/icons-material';
 import React from 'react';
 
-export const categoryListMap = [
-  { item: CategoryEnum.CAR, icon: <CarRental /> },
-  { item: CategoryEnum.CHILDREN, icon: <ChildCare /> },
-  { item: CategoryEnum.FOOD, icon: <Fastfood /> },
-  { item: CategoryEnum.GIFTS, icon: <CardGiftcardOutlined /> },
-  { item: CategoryEnum.HEALTH, icon: <HealthAndSafety /> },
-  { item: CategoryEnum.HOUSE, icon: <HouseOutlined /> },
-  { item: CategoryEnum.CLOTHES, icon: <Checkroom /> },
-  { item: CategoryEnum.OTHER, icon: <AllInclusive /> },
-];
+import {
+  CATEGORY_COLOR_CAR,
+  CATEGORY_COLOR_CHILDREN,
+  CATEGORY_COLOR_CLOTHES,
+  CATEGORY_COLOR_FOOD,
+  CATEGORY_COLOR_GIFTS,
+  CATEGORY_COLOR_HEALTH,
+  CATEGORY_COLOR_HOUSE,
+  CATEGORY_COLOR_OTHER,
+} from '../../constants';
+
+export const categoryListMap = {
+  [CategoryEnum.CAR]: {
+    icon: <CarRental />,
+    color: CATEGORY_COLOR_CAR,
+  },
+  [CategoryEnum.CHILDREN]: {
+    icon: <ChildCare />,
+    color: CATEGORY_COLOR_CHILDREN,
+  },
+  [CategoryEnum.FOOD]: {
+    icon: <Fastfood />,
+    color: CATEGORY_COLOR_FOOD,
+  },
+  [CategoryEnum.GIFTS]: {
+    icon: <CardGiftcardOutlined />,
+    color: CATEGORY_COLOR_GIFTS,
+  },
+  [CategoryEnum.HEALTH]: {
+    icon: <HealthAndSafety />,
+    color: CATEGORY_COLOR_HEALTH,
+  },
+  [CategoryEnum.HOUSE]: {
+    icon: <HouseOutlined />,
+    color: CATEGORY_COLOR_HOUSE,
+  },
+  [CategoryEnum.CLOTHES]: {
+    icon: <Checkroom />,
+    color: CATEGORY_COLOR_CLOTHES,
+  },
+  [CategoryEnum.OTHER]: {
+    icon: <AllInclusive />,
+    color: CATEGORY_COLOR_OTHER,
+  },
+};

@@ -1,15 +1,21 @@
 import { createTheme } from '@mui/material/styles';
 
+import {
+  COLOR_INFO_MAIN,
+  COLOR_PRIMARY_MAIN,
+  COLOR_SECONDARY_MAIN,
+} from '../constants';
+
 export const theme = createTheme({
   palette: {
     primary: {
-      main: '#5FA8D3',
+      main: COLOR_PRIMARY_MAIN,
     },
     secondary: {
-      main: '#1B4965',
+      main: COLOR_SECONDARY_MAIN,
     },
     info: {
-      main: '#b0d8e1',
+      main: COLOR_INFO_MAIN,
     },
   },
 });

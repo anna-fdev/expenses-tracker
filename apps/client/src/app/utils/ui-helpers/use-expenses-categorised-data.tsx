@@ -1,6 +1,24 @@
+import { CategoryEnum } from '@expenses-tracker/models';
+import { ApiExpense } from '@expenses-tracker/api-models';
+
 import { useExpenses } from '../../store/hooks';
 
-export const useExpensesCategorisedData = () => {
+import { categoryListMap } from './category-list-map';
+
+export type CategorisedExpenses = {
+  id: number;
+  label: string;
+  value: number;
+  expenses: ApiExpense[];
+  color: string;
+};
+
+type UseExpensesCategorisedData = {
+  uniqueCategoriesMap: CategorisedExpenses[];
+  totalAmount: string | undefined;
+};
+
+export const useExpensesCategorisedData = (): UseExpensesCategorisedData => {
   const { data } = useExpenses();
   const { entries = [] } = data || {};
 
@@ -21,6 +39,7 @@ export const useExpensesCategorisedData = () => {
       id: idx,
       label: category,
       value: totalByCategory,
+      color: categoryListMap[category as CategoryEnum].color,
       expenses: expensesByCategory,
     };
   });

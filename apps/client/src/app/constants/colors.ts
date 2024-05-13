@@ -1,0 +1,12 @@
+export const CATEGORY_COLOR_CAR = '#7acbb7';
+export const CATEGORY_COLOR_CHILDREN = '#78879b';
+export const CATEGORY_COLOR_FOOD = '#4793AF';
+export const CATEGORY_COLOR_GIFTS = '#DD5746';
+export const CATEGORY_COLOR_HEALTH = '#9896c9';
+export const CATEGORY_COLOR_HOUSE = '#78A083';
+export const CATEGORY_COLOR_CLOTHES = '#BB8493';
+export const CATEGORY_COLOR_OTHER = '#FFAF45';
+export const COLOR_HELPER_1 = '#7c7c7c';
+export const COLOR_PRIMARY_MAIN = '#1FAB89';
+export const COLOR_SECONDARY_MAIN = '#514e9f';
+export const COLOR_INFO_MAIN = '#ffffff';

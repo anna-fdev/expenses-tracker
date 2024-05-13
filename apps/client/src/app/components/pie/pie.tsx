@@ -4,7 +4,7 @@ import { useDrawingArea } from '@mui/x-charts';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 
-import { useExpensesCategorisedData } from '../../utils/ui-helpers/use-expenses-categorised-data';
+import { useExpensesCategorisedData } from '../../utils/ui-helpers';
 
 export const pieParams = {
   width: 600,
