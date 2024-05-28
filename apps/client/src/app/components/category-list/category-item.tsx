@@ -33,7 +33,7 @@ export const CategoryItem: FC<CategoryItemProps> = ({
             {categorisedExpenses.label}
           </Grid>
           <Grid item xs={5} textAlign="right" color={COLOR_HELPER_1}>
-            {categorisedExpenses.value}
+            {categorisedExpenses.value.toFixed(2)}
           </Grid>
         </Grid>
       </AccordionSummary>
@@ -54,7 +54,7 @@ export const CategoryItem: FC<CategoryItemProps> = ({
                   {expense.name}
                 </Grid>
                 <Grid item xs={2} color={COLOR_HELPER_1}>
-                  {expense.amount}
+                  {expense.amount.toFixed(2)}
                 </Grid>
               </ListItem>
             </Grid>
