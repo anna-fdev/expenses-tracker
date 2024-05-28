@@ -135,7 +135,9 @@ export const ExpenseList: FC = () => {
                 <TableBody>
                   {data?.entries.map((entry) => (
                     <TableRow hover key={entry.id}>
-                      <TableCell align="left">{entry.amount}</TableCell>
+                      <TableCell align="left">
+                        {entry.amount.toFixed(2)}
+                      </TableCell>
                       <TableCell align="left">{entry.name}</TableCell>
                       <TableCell align="left">{entry.category}</TableCell>
                       <TableCell align="right">
